@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRM Take-Home Submission Draft</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --ink: #2f3437;
+      --muted: #4f5559;
+      --line: #e8e6e3;
+      --panel: #ffffff;
+      --soft: #f7f6f3;
+      --blue-bg: #e7f3ff;
+      --blue: #337ea9;
+      --green: #448361;
+      --amber: #9f6b2f;
+      --red: #c4554d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 18px/1.45 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 44px 26px 90px; }
+    header {
+      border-bottom: 0;
+      padding: 10px 0 30px;
+      margin-bottom: 14px;
+    }
+    .eyebrow { text-transform: uppercase; letter-spacing: .09em; color: var(--blue); font-size: 12px; font-weight: 800; }
+    h1 { margin: 8px 0 10px; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; letter-spacing: -.02em; max-width: 980px; }
+    .dek { color: var(--muted); font-size: 18px; max-width: 900px; margin: 0; }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 22px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,.94);
+      backdrop-filter: blur(10px);
+      padding: 10px 0;
+      z-index: 5;
+      border-bottom: 1px solid var(--line);
+    }
+    nav a { color: var(--ink); text-decoration: none; border: 1px solid var(--line); background: var(--soft); padding: 7px 10px; border-radius: 6px; font-size: 13px; font-weight: 650; }
+    section {
+      background: var(--panel);
+      border: 0;
+      border-radius: 0;
+      padding: 24px 0 8px;
+      margin: 12px 0 26px;
+      scroll-margin-top: 68px;
+      box-shadow: none;
+    }
+    h2 {
+      margin: 0 0 18px;
+      font-size: 32px;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+      background: var(--blue-bg);
+      border-radius: 6px;
+      padding: 4px 9px;
+    }
+    h3 { margin: 24px 0 10px; font-size: 19px; }
+    p { color: var(--muted); margin: 8px 0; }
+    ul, ol { margin: 10px 0; padding-left: 22px; color: var(--muted); }
+    li { margin: 6px 0; }
+    strong { color: var(--ink); }
+    .tldr {
+      border-left: 4px solid var(--blue);
+      background: #f3f8fc;
+      padding: 12px 14px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      color: #26384f;
+    }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card { border: 1px solid var(--line); background: var(--soft); border-radius: 6px; padding: 14px; }
+    .card h3, .card h4 { margin-top: 0; }
+    .tag { display: inline-block; border-radius: 999px; padding: 3px 8px; font-size: 12px; font-weight: 800; background: var(--soft); color: #38352f; margin-bottom: 8px; }
+    .tag.green { background: #e6f1ea; color: var(--green); }
+    .tag.amber { background: #f6ecd8; color: var(--amber); }
+    .tag.red { background: #f7e4df; color: var(--red); }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 0; margin: 18px 0 28px; }
+    table { width: 100%; border-collapse: collapse; min-width: 820px; }
+    th, td { border: 1px solid var(--line); padding: 12px 14px; text-align: left; vertical-align: top; }
+    th { background: var(--soft); font-size: 16px; text-transform: uppercase; letter-spacing: 0; color: var(--ink); }
+    tr:last-child td { border-bottom: 0; }
+    td { color: var(--ink); }
+    td:first-child { background: var(--soft); font-weight: 700; width: 30%; }
+    .rank { font-weight: 900; color: var(--blue); }
+    pre {
+      white-space: pre-wrap;
+      background: #f7f6f3;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      border-radius: 6px;
+      padding: 16px;
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .note { color: #5b574e; font-size: 13px; }
+    .callout { border: 1px solid #c8d7eb; background: #f0f6ff; border-radius: 8px; padding: 12px 14px; color: #26384f; }
+    .evidence {
+      border: 1px solid var(--line);
+      background: #fbfbfa;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 14px 0 4px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .evidence strong { font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #6b6f73; }
+    .evidence a { color: #2b6cb0; font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+    .slack-note {
+      border: 1px solid var(--line);
+      background: #fbfbfa;
+      border-radius: 6px;
+      padding: 18px;
+      margin: 14px 0;
+    }
+    .candidate {
+      border-top: 1px solid var(--line);
+      padding: 14px 0;
+    }
+    .candidate:first-of-type { border-top: 0; }
+    .candidate h4 { margin: 0 0 6px; font-size: 18px; }
+    .candidate h4 a { color: #2b6cb0; text-decoration: underline; text-underline-offset: 2px; }
+    .candidate p { margin: 4px 0; }
+    @media (max-width: 820px) {
+      .grid, .grid.two { grid-template-columns: 1fr; }
+      section { padding: 18px; }
+      nav { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="eyebrow">TRM Labs Take-Home Draft</div>
+      <h1>Senior Full-Stack Product Engineering Search</h1>
+      <p class="dek">My working submission draft. Built as a live recruiting search: define the bar, map the market, build an AI-assisted workflow, source candidates, calibrate the misses, and turn the work into a clear hiring-manager narrative.</p>
+      <p class="note">Publishing note: I am using a public GitHub Pages link so the panel can review the HTML artifacts cleanly. I will remove or disable the public link after the process concludes.</p>
+    </header>
+
+    <nav>
+      <a href="#summary">TLDR</a>
+      <a href="#step1">1 High Growth</a>
+      <a href="#step2">2 Quality Bar</a>
+      <a href="#step3">3 Requirements</a>
+      <a href="#step4">4 Agent</a>
+      <a href="#step5">5 Slate</a>
+      <a href="#step6">6 Outreach</a>
+      <a href="#step7">7 HM Response</a>
+      <a href="#step8">8 90-Day Search</a>
+      <a href="#step9">9 Prioritization</a>
+      <a href="#ai">AI Use</a>
+      <a href="#appendix">Appendix</a>
+    </nav>
+
+    <section id="summary">
+      <h2>TLDR</h2>
+      <div class="tldr"><strong>My approach:</strong> I treated this like a live search, not a writing exercise. I used AI to move faster on market mapping, Boolean logic, candidate review, and calibration, but kept the final judgment anchored in evidence from the role, company guide, and profile reviews.</div>
+      <div class="grid">
+        <div class="card"><span class="tag green">Bar</span><h3>What I am looking for</h3><p>Senior product engineers who have owned backend/API/full-stack systems in high-velocity, talent-dense environments.</p></div>
+        <div class="card"><span class="tag">Search</span><h3>Where I am looking</h3><p>Primary focus: fintech/risk, identity/security, compliance workflow, API/developer platform, and product platform teams.</p></div>
+        <div class="card"><span class="tag amber">Validation</span><h3>What I will not overclaim</h3><p>LinkedIn alone cannot prove citizenship, exact tenure, compensation motivation, or full technical depth. Those stay as validation items.</p></div>
+      </div>
+      <div class="evidence"><strong>Evidence link:</strong> <a href="trm-company-guide-paraform.html">Company guide and high-growth source model</a></div>
+    </section>
+
+    <section id="step1">
+      <h2>🚀 Step 1: "High growth, fast-paced startups"</h2>
+      <p><strong>Respond to the questions below:</strong></p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Question</th><th>Your response</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Write your definition of a "High growth, fast-paced startup"</td>
+              <td>A high-growth, fast-paced startup is a company where the business is scaling faster than the operating system around it. The work usually has three signals: strong talent density, urgent customer or market pull, and a culture where people are expected to make clear tradeoffs without perfect information.</td>
+            </tr>
+            <tr>
+              <td>How did you come up with this definition?</td>
+              <td>I used Paraform's Talent Density Index as the main model because it looks at the quality and concentration of talent, not just brand name or funding. I then cross-checked that against the actual profiles we reviewed so I did not treat "well-known company" as the same thing as "right environment." Paraform also uses a supply/demand model, which is an excellent market signal. To consider alternatives, I sourced counter-points here: <a href="trm-company-guide-paraform.html">trm-company-guide-paraform.html</a></td>
+            </tr>
+            <tr>
+              <td>Why would this be a pre-requisite for most positions at TRM?</td>
+              <td>TRM's posting is explicit: priorities change quickly, pace is high, ambiguity is normal, and engineers are expected to anchor projects. Someone from a slower, highly-defined environment may still be strong, but the search should bias toward people who have already operated with urgency, ownership, and incomplete information.</td>
+            </tr>
+            <tr>
+              <td>List at least 5 high-growth fast paced startups that are currently on your radar and why.</td>
+              <td>
+                <strong>1. Vanta</strong> - security/compliance workflow adjacency, high-growth operating environment, and overlap with TRM's trust/risk product environment.<br><br>
+                <strong>2. Glean</strong> - enterprise search, permissions, connectors, and product/platform engineering.<br><br>
+                <strong>3. Linear</strong> - small, product-heavy, talent-dense engineering team with a high craft bar and relevant startup velocity.<br><br>
+                <strong>4. Ramp</strong> - fintech product velocity, risk/controls adjacency, and high-demand product/backend/platform talent.<br><br>
+                <strong>5. Chainguard</strong> - security product, software supply chain, enterprise trust, and API/security-product relevance.<br><br>
+                <em>Caveat:</em> Stripe is not "high-growth startup" in the same way, but it is a talent-dense company I would tap for fraud/risk/API product engineers if we want to expand beyond startup-growth-only sourcing.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="step2">
+      <h2>💫 Step 2: Profile Quality</h2>
+      <div class="tldr"><strong>Simple rule:</strong> I score role fit before resume shine. Strong companies and degrees help, but the best signal is whether the person has owned the kind of product/backend/API systems TRM needs.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Attribute</th><th>Weight</th><th>Rationale</th></tr></thead>
+          <tbody>
+            <tr><td>Product/API/backend ownership</td><td>25%</td><td>Closest match to the role: public APIs, customer-facing workflows, services, platform systems, or backend product surfaces.</td></tr>
+            <tr><td>High-growth startup operating environment</td><td>15%</td><td>TRM needs people who can move through ambiguity and shifting priorities without waiting for perfect specs.</td></tr>
+            <tr><td>Technical depth</td><td>20%</td><td>Evidence of scalable systems, services, data/storage judgment, reliability, and full-stack fluency.</td></tr>
+            <tr><td>End-to-end product judgment</td><td>15%</td><td>Can translate customer pain into technical requirements and ship a usable product, not just implement tickets.</td></tr>
+            <tr><td>Tenure and progression</td><td>10%</td><td>Consistent tenure reduces churn risk and shows ability to compound impact inside a company.</td></tr>
+            <tr><td>Cross-functional communication</td><td>10%</td><td>AI is expanding engineering scope into product judgment and vice versa; strong engineers need to create clarity across teams.</td></tr>
+            <tr><td>Hireability and motivation</td><td>5%</td><td>Mission, remote setup, comp range, and likely openness matter because this is a passive-talent search.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Degree is a useful technical-foundation signal when available, especially CS/MSCS, but I would not use it as a hard filter for this search.</p>
+      <div class="evidence"><strong>Evidence link:</strong> <a href="recruiting-profile-evaluator-agent-plan.html">Profile evaluator agent plan</a> + <a href="trm-profile-calibration-log.html">calibration log</a></div>
+    </section>
+
+    <section id="step3">
+      <h2>💪 Step 3: Review the profile requirements</h2>
+      <div class="grid two">
+        <div class="card"><h3>Hard filters</h3><ul><li>US Citizen employed in the United States.</li><li>5+ years professional software engineering experience.</li><li>At least one high-growth, US-based startup experience.</li><li>Consistent tenure around 2+ years where possible.</li><li>Not from competitors or TRM itself.</li></ul></div>
+        <div class="card"><h3>Validation stance</h3><ul><li>Citizenship is marked <strong>needs validation</strong> until confirmed.</li><li>LinkedIn summaries are treated as thin sourcing data, not complete resumes.</li><li>Company signal is a prior, not proof.</li><li>Wrong archetype beats strong keywords.</li></ul></div>
+      </div>
+      <div class="evidence"><strong>Evidence link:</strong> <a href="trm-candidate-review-workstation.html">Candidate review workstation</a></div>
+    </section>
+
+    <section id="step4">
+      <h2>🤖 Step 4: Create and Prompt an AI Agent for your search</h2>
+      <div class="tldr"><strong>What I built:</strong> a lightweight multi-step workflow that turns the JD into search strategy, company/team targeting, profile scoring, calibration notes, and HM-ready output.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Layer</th><th>Job</th><th>Human check</th></tr></thead>
+          <tbody>
+            <tr><td>Market Mapper</td><td>Translate TRM's role into target companies, teams, and Boolean blocks.</td><td>I checked for overbroad company assumptions and narrowed by team/function.</td></tr>
+            <tr><td>Profile Evaluator</td><td>Score pasted LinkedIn/profile evidence against the rubric.</td><td>I calibrated misses with Claude/human review and added false-positive rules.</td></tr>
+            <tr><td>Skeptic / Red Team</td><td>Challenge weak logic, overclaims, and AI-shaped generic writing.</td><td>I used this especially on candidate slate, HM response, and AI disclosure.</td></tr>
+            <tr><td>Submission Writer</td><td>Convert search work into Notion-ready sections and Slack drafts.</td><td>I keep tone and final decisions human-owned.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>TAM / market read</h3>
+      <p>LinkedIn Talent Insights pull showed roughly <strong>490 professionals</strong> under the working filter set. That is big enough to run a focused search, but not so big that the bar can be loose. The right move is targeted team/function sourcing first, then expansion if the slate is too thin.</p>
+      <h3>Target lanes</h3>
+      <ul>
+        <li>API / Developer Platform</li>
+        <li>Identity / Access / Permissions</li>
+        <li>Fraud / Risk / Security Product</li>
+        <li>Billing / Usage / Metering</li>
+        <li>Enterprise Workflow / Admin Product</li>
+        <li>Search / Data / Knowledge Systems</li>
+      </ul>
+      <div class="evidence"><strong>Evidence links:</strong> <a href="trm-candidate-review-workstation.html">Candidate review workstation</a> · <a href="trm-company-guide-paraform.html">company guide</a> · <a href="trm-workstation-vs-calibration-review.html">calibration review</a></div>
+    </section>
+
+    <section id="step5">
+      <h2>🔎 Step 5: Create a short list of TOP profiles</h2>
+      <div class="callout"><strong>Note:</strong> This is written as the HM-facing slate, not the internal scoring view. Citizenship, exact interest level, and final profile details still need validation before submission.</div>
+      <h3>Slack message to HM</h3>
+      <div class="slack-note">
+        <p>Hey [HM] - I found five profiles for the Sr. Full-Stack Product Engineering role.</p>
+        <p>I targeted a few select companies and environments with a high talent bar, strong growth trajectory, and close alignment to TRM's API/product/risk/security work.</p>
+
+        <div class="candidate">
+          <h4>1. <a href="https://www.linkedin.com/in/vyolovski/">Valyo Y.</a> - Vanta</h4>
+          <p><strong>Why I like him:</strong> Vanta tech lead signal, founding engineer pattern, and multi-startup velocity all converge. This is the cleanest blend of startup pace, product ownership, and security/compliance adjacency in the slate.</p>
+        </div>
+
+        <div class="candidate">
+          <h4>2. <a href="https://www.linkedin.com/in/jinhao-ping-ab152056/">Jinhao Ping</a> - Amazon / Uber</h4>
+          <p><strong>Why I like him:</strong> Amazon founding engineer experience, full product lifecycle ownership, and Uber unified API framework. Strongest direct evidence that he has already done the kind of API/product ownership this role needs.</p>
+        </div>
+
+        <div class="candidate">
+          <h4>3. <a href="https://www.linkedin.com/in/adrian-pasqualini/">Adrian Pasqualini</a> - Ramp / Opal</h4>
+          <p><strong>Why I like him:</strong> Opal public-facing API ownership is one of the clearest API signals in the pool, and Ramp adds a strong fintech/product-growth environment. The caveat is YOE: I would validate whether TRM counts Waterloo co-op experience toward the 5-year bar.</p>
+        </div>
+
+        <div class="candidate">
+          <h4>4. <a href="https://www.linkedin.com/in/hansbala/">Hans Bala</a> - Glean</h4>
+          <p><strong>Why I like him:</strong> Glean product engineer with explicit Go, TypeScript, and MySQL stack. GrowSquares REST API authorship and E-HOA Golang backend show a pattern of building APIs across career stages. Brown CS 3.92 adds technical foundation signal.</p>
+        </div>
+
+        <div class="candidate">
+          <h4>5. <a href="https://www.linkedin.com/in/ema-milojkovic/">Ema Milojkovic</a> - Linear / Robinhood / Tome</h4>
+          <p><strong>Why I like her:</strong> Robinhood backend, Tome full-stack, and Linear give a clean product engineering trajectory across talent-dense teams. Linear also brings the kind of small-team craft and ownership signal I want for this search.</p>
+        </div>
+
+        <p><strong>Secondary pool:</strong> I also have three strong Stripe prospects if we decide to tap a talent-dense company for fraud/risk/API product engineers rather than staying strict on high-growth startup environments.</p>
+        <p>My read: the strongest pattern so far is not crypto experience. It is product engineers from fraud/risk, identity, API/platform, and security/compliance environments who can own ambiguous backend/product systems end to end.</p>
+      </div>
+      <h3>Internal note</h3>
+      <p>Near-misses I would keep warm: Chak Man Li, Yangyu Shu, Lavanya Kannan, Evan Gabrielson, and the Stripe trio. Chak is still strong, but I moved Adrian and Ema up because the slate now leans more clearly into high-growth/product-heavy companies.</p>
+      <div class="evidence"><strong>Evidence link:</strong> <a href="trm-profile-calibration-log.html">candidate calibration log</a></div>
+    </section>
+
+    <section id="step6">
+      <h2>📝 Step 6: Create engaging outreach</h2>
+      <h3>Subject line</h3>
+      <pre>TRM Labs - fraud/risk product engineering with real-world impact</pre>
+      <h3>Sample outreach</h3>
+      <pre>Hi {{first_name}},
+
+I came across your background and the thing that stood out was the mix of backend/product ownership and risk/security-adjacent work.
+
+TRM Labs is hiring a Senior Full-Stack Product Engineer to build customer-facing APIs and product systems used by investigators, financial institutions, and public-sector teams tracing illicit activity.
+
+The reason I thought this could be relevant: this is not a narrow feature role. The team needs engineers who can work through ambiguity, anchor technical decisions, and turn messy customer problems into reliable product surfaces.
+
+Open to a quick conversation? Happy to keep it practical and share the role, team, and comp range upfront.
+
+Dylan</pre>
+    </section>
+
+    <section id="step7">
+      <h2>✔️ Step 7: HM Feedback and Alignment</h2>
+      <h3>HM feedback</h3>
+      <p><em>"Thanks for sending these profiles. I'm concerned that we're not seeing enough fast-paced startup experience."</em></p>
+      <h3>Slack response</h3>
+      <pre>Are you referring to the 5 profiles I shared, or candidates we have considered in the past?
+
+I compiled a company/search guide for this role using the JD, Paraform's talent-density lens, and the profile calibration from this search. Does this align with your thinking?
+
+More specifically: what do you mean by "fast-paced startup experience" for this role?
+
+I am trying to separate three things:
+1. Company environment: high-growth, high-talent-density, ambiguous, urgent.
+2. Work surface: product/API/platform engineering, not just infra or internal tooling.
+3. Operating style: ownership, speed, cross-functional judgment, and ability to work without perfect requirements.</pre>
+      <div class="evidence"><strong>Reference links:</strong> <a href="#step5">5 profiles shared</a> · <a href="trm-company-guide-paraform.html">company/search guide</a></div>
+    </section>
+
+    <section id="step8">
+      <h2>⚒️ Step 8: Generate Insights</h2>
+      <div class="callout"><strong>TLDR:</strong> the search is not only a market problem. Applications spiked early, but current quality supply is being diluted by location/eligibility issues and prospecting volume is too low.</div>
+      <h3>What the data says</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Signal</th><th>Read</th><th>Implication</th></tr></thead>
+          <tbody>
+            <tr><td>860 applications, +145%</td><td>Application volume was strong, including a spike the week of Jan. 5, 2026.</td><td>The role can attract attention, but recent volume appears to have fallen off.</td></tr>
+            <tr><td>Average time in stage: 26 days, +271%</td><td>This conflicts with the stage-level view, where most stages appear materially lower after app review.</td><td>I would not over-rotate on this without confirming the reporting logic. Pace looks broadly workable once candidates move past app review.</td></tr>
+            <tr><td>Source mix dominated by 3rd-party boards and marketing</td><td>Prospecting and referrals are tiny relative to inbound.</td><td>We are underusing the channels most likely to produce calibrated senior talent.</td></tr>
+            <tr><td>257 location rejections, 62%</td><td>Location is the top rejection reason.</td><td>Posting and outreach need to be blunt: must reside in the US, no sponsorship.</td></tr>
+            <tr><td>105 spam rejections, 25%</td><td>Inbound volume includes heavy noise.</td><td>Inbound count is not the same as usable pipeline.</td></tr>
+            <tr><td>33 lacking skills, 8%; 14 visa, 3%</td><td>Skill and eligibility filters are meaningful but secondary to location/spam.</td><td>Clearer posting and tighter outbound should improve conversion.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Path to green</h3>
+      <ol>
+        <li><strong>Increase prospecting volume.</strong> I will create a Gem + LinkedIn project and drive 40 recruiter-sourced prospects weekly. HM owns outreach or referrals for the top 10 weekly prospects.</li>
+        <li><strong>Run a referral drive.</strong> I will map prospects to the HM, team, and peer networks and kick off the push in Slack by EOW. HM action: post on LinkedIn calling for startup engineers with API/platform/risk/security product experience.</li>
+        <li><strong>Clarify the time-in-stage discrepancy.</strong> I see one view showing 26 average days, but the stage-level data looks closer to roughly 8 days after app review, with app review around 21 days. I would follow up if the discrepancy reveals a real bottleneck.</li>
+        <li><strong>Repost with clearer eligibility language.</strong> Must reside in the US. Role is not eligible for sponsorship.</li>
+        <li><strong>Revisit the interview sequence.</strong> If R1 is rejecting 33%, consider moving the technical screen to async or before HM screen, then combine HM screen with final interview once technical bar is clear.</li>
+      </ol>
+      <h3>Slack message</h3>
+      <pre>Hey [HM] - following up on your concern about fast-paced startup experience. I dug into the 90+ day search data. TLDR: I do not think this is just a talent-market issue. We have two clear fixable problems: low calibrated prospecting volume and inbound noise from location/eligibility mismatch.
+
+What I am seeing:
+- 860 applications, but the spike was early and recent inbound appears to have cooled.
+- Prospecting/referrals are tiny compared with job boards/marketing.
+- 62% of rejections are location, 25% spam. We need cleaner inbound and stronger outbound.
+- Note: I see a discrepancy in the time-in-stage data. One view says 26 average days, but the stage-level view looks much lower after app review. I would not call that a bottleneck until we confirm the reporting logic.
+
+Path to green:
+1. I will build a Gem + LinkedIn project and drive 40 recruiter prospects/week.
+2. I would like you to own outreach/referrals for the top 10 weekly prospects.
+3. I will kick off a referral drive by EOW with prospects mapped to your team/network.
+4. I will confirm whether time in stage is a real issue or just a reporting mismatch.
+5. Repost with clearer language: must reside in the US; not eligible for sponsorship.
+6. If R1 is rejecting 33%, let's revisit the sequence: async technical screen or technical screen before HM, then combine HM with final.
+
+I would treat this as a 2-week reset with a scoreboard, not a full search restart.</pre>
+      <div class="evidence"><strong>Evidence link:</strong> <a href="#appendix">see Appendix for supporting assets and how I would demo the workflow</a></div>
+    </section>
+
+    <section id="step9">
+      <h2>📚 Step 9: Prioritization Exercise</h2>
+      <div class="tldr"><strong>Principle:</strong> I prioritize irreversible candidate moments, exec-visible commitments, and process blockers that create downstream delays.</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Task</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td>Offer Letter</td><td>A verbal accept is fragile. I would move this first because delay creates real counteroffer and trust risk.</td></tr>
+            <tr><td class="rank">2</td><td>HM Sync Prep at 11:30am</td><td>Imminent, high-priority meeting. I need enough prep to show command of pipeline and blockers.</td></tr>
+            <tr><td class="rank">3</td><td>CTO Referral Review</td><td>Exec-visible and time-sensitive. Even a fast acknowledgment/review protects the relationship.</td></tr>
+            <tr><td class="rank">4</td><td>Finalist Scheduling</td><td>Limited candidate availability disappears quickly, and onsite loops are hard to coordinate.</td></tr>
+            <tr><td class="rank">5</td><td>Debrief Setup before 3pm</td><td>Blocks a final decision. I would schedule this before the day gets eaten by meetings.</td></tr>
+            <tr><td>6</td><td>New Role Intake at 2pm</td><td>Important, but the time is fixed. I would prep enough to use the HM's 30 minutes well.</td></tr>
+            <tr><td>7</td><td>Scorecard Reminders</td><td>Fast pings that unblock decision quality. Low effort, meaningful process impact.</td></tr>
+            <tr><td>8</td><td>Greenhouse Stage Note</td><td>Ops dependency for tomorrow's dashboard. Quick enough to handle between larger items.</td></tr>
+            <tr><td>9</td><td>Candidate Concierge</td><td>Important candidate experience, but onsite is next week. I would reply before EOD.</td></tr>
+            <tr><td>10</td><td>Gem Outreach Block</td><td>Pipeline generation matters, but today has several live candidate/process commitments that are more time-sensitive.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="agent-share">
+      <h2>Share the AI Agent Here</h2>
+      <p><strong>Primary demo:</strong> <a href="trm-candidate-review-workstation.html">TRM Candidate Review Workstation</a></p>
+      <p>This is the lightweight agent/workflow I would show live: paste a LinkedIn/profile summary, score it against the rubric, generate false-positive flags, create X-ray searches, log the result, and export the evidence to CSV.</p>
+      <h3>What makes it more than a prompt</h3>
+      <ul>
+        <li><strong>Market mapper:</strong> turns the JD into company targets, team lanes, and Boolean blocks.</li>
+        <li><strong>Profile evaluator:</strong> reviews pasted LinkedIn evidence against the role rubric and logs structured output.</li>
+        <li><strong>Calibration loop:</strong> compares first-pass scores against Claude/human review and updates false-positive rules.</li>
+        <li><strong>Red-team layer:</strong> challenges overclaims, weak company logic, and candidates who look strong only because of brand or keywords.</li>
+        <li><strong>Submission layer:</strong> turns the work into HM-ready Slack messages, outreach, and panel-ready explanation.</li>
+      </ul>
+      <p>The calibration loop is the important part. The system initially over-scored profiles when company brand or keywords looked good but the actual function was wrong. I adjusted the workflow after misses like frontend-primary profiles, ML infra/FDE profiles, API consumers, and company-prior false positives.</p>
+    </section>
+
+    <section id="ai">
+      <h2>AI Usage Note</h2>
+      <p>I used AI as a workflow layer: research assistant, market mapper, profile reviewer, calibration partner, skeptic, and writing editor.</p>
+      <h3>Where AI materially improved the work</h3>
+      <ul>
+        <li>Translated the JD into search criteria and evaluation dimensions.</li>
+        <li>Built a target-company and team guide using Paraform as the foundation.</li>
+        <li>Generated and refined Boolean blocks for company/team sourcing.</li>
+        <li>Built a local candidate review workstation to score pasted profile evidence and log analysis.</li>
+        <li>Compared tool output against Claude/human calibration and corrected false positives.</li>
+        <li>Turned calibration notes into reusable rules for future searches.</li>
+      </ul>
+      <h3>Where calibration changed the system</h3>
+      <ul>
+        <li><strong>Company prior was too loud.</strong> Vanta, Glean, Stripe, Ramp, and Linear are useful sources, but company alone cannot carry a candidate.</li>
+        <li><strong>Keywords were not enough.</strong> The tool initially overvalued words like API, platform, backend, built, and led without checking what was actually built.</li>
+        <li><strong>False positives needed caps.</strong> Frontend-primary, ML infra/FDE, GRC/analyst, API-consumer, and client-implementation profiles now get flagged instead of pushed forward.</li>
+        <li><strong>Fraud/risk/security product work was underweighted.</strong> Stripe Fraud, Coinbase risk, and security API work map strongly to TRM even without crypto experience.</li>
+        <li><strong>Thin LinkedIn evidence needed a softer path.</strong> Some candidates should become validate/probe, not automatic pass or automatic reject.</li>
+      </ul>
+      <h3>Where I overrode AI</h3>
+      <ul>
+        <li>Company name alone was not enough to advance a profile.</li>
+        <li>Keyword matches were not enough when the functional archetype was wrong.</li>
+        <li>Thin LinkedIn evidence became a validation item, not a reason to invent detail.</li>
+        <li>Fraud/risk/security product work was treated as highly relevant to TRM, even when the first-pass tool underweighted it.</li>
+      </ul>
+      <h3>How I would explain this live</h3>
+      <p>I would show the company guide, then the candidate workstation, then the calibration log. The point is not that AI produced the final answer. The point is that AI helped me move faster, see more options, catch misses, and make the judgment process inspectable.</p>
+    </section>
+
+    <section id="appendix">
+      <h2>Appendix: Supporting Evidence + Workflow Links</h2>
+      <div class="tldr"><strong>How to use this appendix:</strong> the main page answers the prompt. These artifacts show the working system behind the answer: how I built the market map, candidate rubric, review workflow, and calibration loop.</div>
+      <div class="grid two">
+        <div class="card">
+          <h3>1. Company Guide</h3>
+          <p><a href="trm-company-guide-paraform.html">trm-company-guide-paraform.html</a></p>
+          <p>Supports Step 1 and Step 4. Shows how I used Paraform/Talent Density as the base model, then narrowed company targets by TRM-relevant team/function lanes.</p>
+        </div>
+        <div class="card">
+          <h3>2. Candidate Review Workstation</h3>
+          <p><a href="trm-candidate-review-workstation.html">trm-candidate-review-workstation.html</a></p>
+          <p>Supports Step 4, Step 5, and the live demo. This is the paste-in workflow for scoring, logging, X-ray search links, false-positive flags, and CSV export.</p>
+        </div>
+        <div class="card">
+          <h3>3. Calibration Log</h3>
+          <p><a href="trm-profile-calibration-log.html">trm-profile-calibration-log.html</a></p>
+          <p>Supports Step 5 and AI fluency. Shows where the tool was wrong, what human/Claude calibration changed, and how the search learned from misses.</p>
+        </div>
+        <div class="card">
+          <h3>4. Workstation vs. Calibration Review</h3>
+          <p><a href="trm-workstation-vs-calibration-review.html">trm-workstation-vs-calibration-review.html</a></p>
+          <p>Supports the AI disclosure. Documents systematic errors like keyword over-scoring, company-prior bias, frontend false positives, and ML infra/FDE mismatches.</p>
+        </div>
+        <div class="card">
+          <h3>5. Profile Evaluator Agent Plan</h3>
+          <p><a href="recruiting-profile-evaluator-agent-plan.html">recruiting-profile-evaluator-agent-plan.html</a></p>
+          <p>Supports Step 2 and Step 4. Captures the future reusable skill: verdict-first evaluation, evidence quality, false-positive tracking, and HM feedback loops.</p>
+        </div>
+        <div class="card">
+          <h3>6. Recruiting Agent Memory</h3>
+          <p><a href="recruiting-agent-memory.html">recruiting-agent-memory.html</a></p>
+          <p>Supports the AI usage note. This is the deeper playbook behind the profile evaluator: strong yes/yes/no judgment, calibration loops, and how to avoid shallow AI scoring.</p>
+        </div>
+        <div class="card">
+          <h3>7. Source CSV / Latest Candidate Log</h3>
+          <p><code>/Users/dylanheyne/Downloads/trm-candidate-review-log-2026-05-21.csv</code></p>
+          <p>Supports Step 5. This is the logged source material for profile URLs, review notes, and calibration history.</p>
+        </div>
+      </div>
+      <h3>FAQ</h3>
+      <p><strong>Why include Appendix links at all?</strong> The main page answers the prompt. The appendix shows the underlying system and gives the panel something concrete to inspect if they want depth.</p>
+      <p><strong>Why keep Stripe as a caveat instead of core top-five company?</strong> Stripe is talent-dense and very relevant for fraud/risk/API product work, but it is not the same high-growth startup signal as Vanta, Glean, Linear, Ramp, or Chainguard.</p>
+      <p><strong>Why did Adrian move up despite the YOE caveat?</strong> The API evidence is unusually clean. I would present him with the caveat rather than bury him, because the validation question is narrow and worth resolving.</p>
+      <p><strong>Why did Ema move up?</strong> Linear adds a product-heavy, high-craft startup signal to the slate, and her Robinhood/Tome/Linear pattern is cleaner for product engineering than several more domain-adjacent but less startup-aligned profiles.</p>
+      <h3>Workflow Demo Path</h3>
+      <ol>
+        <li>Open the company guide and explain why the search narrowed to product/API, risk, identity, security, and workflow teams.</li>
+        <li>Open the candidate workstation and paste a profile summary.</li>
+        <li>Show the score, false-positive risk, generated X-ray links, and logged analysis.</li>
+        <li>Open the calibration log and explain one miss the tool made and how I corrected the workflow.</li>
+        <li>Close with the principle: AI accelerated the work, but evidence and judgment owned the final decisions.</li>
+      </ol>
+    </section>
+
+  </div>
+</body>
+</html>
