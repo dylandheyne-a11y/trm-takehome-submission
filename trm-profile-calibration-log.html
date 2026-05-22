@@ -4,6 +4,38 @@
 :root{--ink:#2f3437;--muted:#5f666b;--line:#e8e6e3;--soft:#f7f6f3;--blue:#337ea9;--bluebg:#e7f3ff}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1050px;margin:0 auto;padding:44px 24px 80px}a{color:#2b6cb0;text-decoration:underline;text-underline-offset:2px}h1{font-size:44px;line-height:1.05;margin:0 0 18px}h2{font-size:28px;margin:28px 0 12px;background:var(--bluebg);border-radius:6px;padding:4px 9px}h3{font-size:22px;margin:24px 0 8px}p,li{color:var(--muted)}code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 4px;color:var(--ink)}pre{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:14px;overflow:auto}.table-wrap{overflow:auto;border:1px solid var(--line);margin:16px 0}table{width:100%;border-collapse:collapse;min-width:720px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:var(--soft);text-transform:uppercase;font-size:13px}.back{display:inline-block;margin-bottom:22px;font-size:14px}.note{border-left:4px solid var(--blue);background:#f3f8fc;padding:12px 14px;border-radius:0 6px 6px 0;margin:16px 0;color:#26384f}</style></head>
 <body><main class="wrap"><a class="back" href="trm-final-submission-draft.html">← Back to final submission</a><h1>TRM Profile Calibration Log</h1><div class="note">Supporting artifact for the TRM take-home submission. This page is intentionally browser-native so it can be shared from GitHub Pages.</div><h2>TRM Profile Calibration Log</h2>
 <p>Working calibration notes from sourced LinkedIn/profile reviews. This is evidence for how the evaluator improves after review feedback.</p>
+<h3>TLDR</h3>
+<p>This was the human-vs-agent calibration layer for the TRM search. I used Codex to score and log profiles, then compared those outputs against Claude/human review grounded in my recruiting-agent memory from prior searches. The goal was not to prove the tool was right. The goal was to catch where it was wrong, update the search logic, and make the judgment process inspectable.</p>
+<p>The biggest lesson: the agent was too willing to trust keywords and company signal. Human/Claude calibration forced the system back to the real question:</p>
+<p>&gt; Did this person do the work TRM needs, or were they just near the work?</p>
+<h3>What This Calibration Event Was</h3>
+<p>The calibration combined three inputs:</p>
+<ol>
+<li><strong>Codex candidate workstation output</strong> — pasted LinkedIn/profile evidence, first-pass scoring, false-positive flags, and CSV logging.</li>
+<li><strong>Claude resume-review project</strong> — a second reviewer with historical profile-review context, used to challenge scoring and stack rank.</li>
+<li><strong>Recruiting agent memory</strong> — the reusable playbook from prior searches that defines patterns like "API builder vs. API consumer," "company prior vs. candidate evidence," and "adjacent to the work is not the same as doing the work."</li>
+</ol>
+<p>I used the memory as the judgment layer, not as a public artifact. It helped guide what to inspect, where AI tends to over-score, and how to translate thin LinkedIn evidence into a practical sourcing decision.</p>
+<h3>What The Agent Got Wrong</h3>
+<p>The first-pass tool was useful, but it had four clear failure modes:</p>
+<ol>
+<li><strong>Keyword scoring over functional judgment.</strong> Words like "built," "led," "backend," and "API" scored too highly even when the work was frontend, internal tooling, compliance delivery, data infrastructure, or API consumption.</li>
+<li><strong>Company tier treated as proof.</strong> Vanta, Vannevar, Stripe, Chainguard, and Baseten were useful sourcing priors, but the tool sometimes let the company carry the candidate.</li>
+<li><strong>False-positive flags were decorative.</strong> The tool could identify a risk like ML infra/FDE or client-feature implementation, then still advance the candidate.</li>
+<li><strong>Wrong archetypes scored too high.</strong> Frontend-primary engineers, AI infra/FDE profiles, IAM analysts, and DevOps/compliance profiles sometimes looked strong because they were near the target work.</li>
+</ol>
+<h3>What Changed In The Agent</h3>
+<ul>
+<li>Classify functional archetype before score.</li>
+<li>Cap verdicts when a false-positive flag is unresolved.</li>
+<li>Treat company as a sourcing prior, not proof of fit.</li>
+<li>Boost practitioner evidence like "owned public-facing API," "designed REST API surface," "SDK ownership," "fraud/risk product engineering," and "full product lifecycle."</li>
+<li>Penalize frontend-primary, ML infra/FDE, API-consumer, and client-feature-only profiles unless the profile explicitly resolves the concern.</li>
+<li>Preserve thin-but-promising LinkedIn profiles as <strong>Hold / Soft Flag</strong>, not automatic skips, when the company/team lane is right but detail is missing.</li>
+</ul>
+<h3>Why This Matters For The Submission</h3>
+<p>This is the evidence that the AI workflow was not just prompting. It was a calibration system: source candidates, score them, compare against another reviewer, identify miss patterns, update the rubric, and rerun the search with tighter Boolean/company/team logic.</p>
+<p>That is the agent architecture I would present live: not "AI gave me a list," but "AI helped me build a review loop that gets sharper as evidence comes in."</p>
 <h3>Calibration Event 1: Vanta Batch</h3>
 <p>Profiles reviewed:</p>
 <ol>
@@ -136,7 +168,17 @@
 <li>Add false-positive risk: ML infra / inference engineer, not full-stack product/API owner.</li>
 </ul>
 <h3>Calibration Event 3: Full Codex Tool Review</h3>
-<p>Source: <code>TRM_CODEX_CALIBRATION_2026-05-21.md</code> and <code>trm-candidate-review-log-2026-05-21.csv</code></p>
+<p>Source: <code>TRM_CODEX_CALIBRATION_2026-05-21.md</code>, <code>trm-candidate-review-log-2026-05-21.csv</code>, and the prior recruiting-agent memory used to ground the review.</p>
+<p>This was the main correction event. Codex and Claude/human review looked at overlapping candidates and diverged on several profiles. The point of the review was to understand why, not just pick a winner.</p>
+<h4>Event Summary</h4>
+<p>Codex was strongest when evidence was obvious: Valyo Y., Ema Milojkovic, and June Xu were directionally aligned. It struggled when profiles were keyword-rich but functionally wrong, or when the right work was described in less obvious terms.</p>
+<ul>
+<li><strong>Jon Anderson:</strong> Codex scored him as a 99 Strong Yes, but his profile was frontend-primary. Correct outcome: Def No for this role.</li>
+<li><strong>Andrew DiCarlo:</strong> Codex scored him as a 97 Strong Yes, but the evidence pointed to enterprise/client feature delivery and compliance work, not product API ownership. Correct outcome: Pass.</li>
+<li><strong>Tiago Ferreira:</strong> Codex under-scored him because it treated Stripe Fraud Engineering like a possible ML/infra pattern. Human review corrected this: fraud/risk/backend product engineering is one of the best TRM analogs.</li>
+<li><strong>Zackary Crosley:</strong> Codex under-scored because Chainguard/Censys were not weighted as strongly as the primary list. Human review corrected this because his Censys API/platform evidence was real.</li>
+</ul>
+<p>The calibration changed the evaluator from "score matching terms" to "classify the work, then score the evidence."</p>
 <h4>System-Level Fixes</h4>
 <p>The tool was still making four systematic errors:</p>
 <ol>
