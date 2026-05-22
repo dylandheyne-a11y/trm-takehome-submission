@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TRM Profile Calibration Log</title>
+<style>
+:root{--ink:#2f3437;--muted:#5f666b;--line:#e8e6e3;--soft:#f7f6f3;--blue:#337ea9;--bluebg:#e7f3ff}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1050px;margin:0 auto;padding:44px 24px 80px}a{color:#2b6cb0;text-decoration:underline;text-underline-offset:2px}h1{font-size:44px;line-height:1.05;margin:0 0 18px}h2{font-size:28px;margin:28px 0 12px;background:var(--bluebg);border-radius:6px;padding:4px 9px}h3{font-size:22px;margin:24px 0 8px}p,li{color:var(--muted)}code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 4px;color:var(--ink)}pre{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:14px;overflow:auto}.table-wrap{overflow:auto;border:1px solid var(--line);margin:16px 0}table{width:100%;border-collapse:collapse;min-width:720px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:var(--soft);text-transform:uppercase;font-size:13px}.back{display:inline-block;margin-bottom:22px;font-size:14px}.note{border-left:4px solid var(--blue);background:#f3f8fc;padding:12px 14px;border-radius:0 6px 6px 0;margin:16px 0;color:#26384f}</style></head>
+<body><main class="wrap"><a class="back" href="trm-final-submission-draft.html">← Back to final submission</a><h1>TRM Profile Calibration Log</h1><div class="note">Supporting artifact for the TRM take-home submission. This page is intentionally browser-native so it can be shared from GitHub Pages.</div><h2>TRM Profile Calibration Log</h2>
+<p>Working calibration notes from sourced LinkedIn/profile reviews. This is evidence for how the evaluator improves after review feedback.</p>
+<h3>Calibration Event 1: Vanta Batch</h3>
+<p>Profiles reviewed:</p>
+<ol>
+<li>Valyo Y.</li>
+<li>Isabelle Zhou</li>
+<li>Andrew DiCarlo</li>
+</ol>
+<h3>Andrew DiCarlo</h3>
+<p>Verdict from Claude resume-review project:</p>
+<p>&gt; No — ~58 | Do Not Advance</p>
+<h4>Why</h4>
+<p>Andrew has credible engineering experience and strong mission adjacency, but the profile does not show the core TRM fit clearly enough:</p>
+<ul>
+<li>Built features inside existing products for clients.</li>
+<li>No clear public-facing API product ownership.</li>
+<li>No visible Node.js, TypeScript, or Postgres signal.</li>
+<li>Qualtrics is enterprise/compliance-heavy, but not a high-growth startup operating environment.</li>
+<li>Vanta tenure is still early and profile detail is thin.</li>
+</ul>
+<h4>What is real</h4>
+<ul>
+<li>Qualtrics bullets are specific and practitioner-like.</li>
+<li>FedRAMP lead experience is legitimate compliance/national-security adjacent signal.</li>
+<li>75th Rangers background is a strong mission-alignment signal.</li>
+<li>Python, DevOps, and networking are useful but not the primary TRM stack.</li>
+</ul>
+<h4>What is missing</h4>
+<ul>
+<li>Public-facing API product surface.</li>
+<li>Explicit backend/API product ownership.</li>
+<li>Node.js / TypeScript / Postgres.</li>
+<li>Clear startup-velocity evidence beyond Vanta company signal.</li>
+</ul>
+<h4>False-positive pattern</h4>
+<p>API-adjacent / client-feature builder vs. API product builder.</p>
+<p>This mirrors the SDK search pattern:</p>
+<p>&gt; adjacent to the work is not the same as doing the work.</p>
+<h3>Vanta Pattern After 3 Profiles</h3>
+<p>Vanta remains a legitimate source for:</p>
+<ul>
+<li>compliance/security adjacency,</li>
+<li>enterprise trust,</li>
+<li>fast-growth operating environment,</li>
+<li>likely mission resonance.</li>
+</ul>
+<p>But Vanta alone does not advance a candidate.</p>
+<p>Observed pattern:</p>
+<ul>
+<li>Vanta profiles are often thin on stack and ownership.</li>
+<li>Company signal is strong, but candidate-level evidence varies.</li>
+<li>Valyo is stronger because tech lead/founding engineer/activity-feed evidence gave additional signal.</li>
+<li>Isabelle and Andrew need validation on stack depth and seniority/ownership before advancing.</li>
+</ul>
+<p>Working rule:</p>
+<p>&gt; Vanta is a strong company prior, not a verdict. Advance only when Vanta is paired with team/function signal, senior scope, and evidence or probe-confirmed backend/API/product ownership.</p>
+<h3>Updated Stack Rank</h3>
+<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Candidate</th><th>Score</th><th>Verdict</th><th>Note</th></tr></thead><tbody><tr><td>1</td><td>Valyo Y.</td><td>~98</td><td>Advance</td><td>Tech lead, multi-startup, vendor risk / TRM adjacency</td></tr><tr><td>2</td><td>Isabelle Zhou</td><td>~71</td><td>Hold</td><td>Validate stack depth and YOE</td></tr><tr><td>3</td><td>Andrew DiCarlo</td><td>~58</td><td>Pass</td><td>Client feature work does not prove API product ownership</td></tr></tbody></table></div>
+<h3>Search Adjustment</h3>
+<p>After three Vanta profiles, diversify the batch:</p>
+<ul>
+<li>Add non-Vanta primary targets to avoid over-calibrating on one company.</li>
+<li>Pull from Ramp, LangChain, Metronome, Hex, Glean, Chainguard, or Drata. Baseten was later removed from active sourcing after the AI infra batch calibration.</li>
+<li>Keep Vanta in the pool, but require team/function or external evidence.</li>
+</ul>
+<h3>Tool / Agent Update</h3>
+<p>Evaluator should:</p>
+<ul>
+<li>Down-rank client-feature / implementation-only profiles when API product ownership is not visible.</li>
+<li>Treat FedRAMP/compliance/national-security as mission adjacency, not technical fit.</li>
+<li>Treat Vanta company signal as strong prior, not automatic advance.</li>
+<li>Preserve thin-but-promising profiles as Soft Flag only when team/function and archetype remain plausible.</li>
+<li>Surface "API consumer / adjacent builder vs. API product owner" as a false-positive risk.</li>
+</ul>
+<h3>Calibration Event 2: Baseten / AI Infra Batch</h3>
+<p>Profiles reviewed:</p>
+<ol>
+<li>Christopher Wirick</li>
+<li>Alex Ker</li>
+<li>David Oy</li>
+<li>Ian Carrasco</li>
+</ol>
+<h3>Candidate Outcomes</h3>
+<div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Verdict</th><th>Approx. score</th><th>Reason</th></tr></thead><tbody><tr><td>Christopher Wirick</td><td>No</td><td>~44</td><td>Pure data/ML infrastructure: Kubernetes, Kafka, Airflow, feature stores, AI inference scaling. Wrong archetype for TRM full-stack/API product role.</td></tr><tr><td>Alex Ker</td><td>Def No</td><td>DQ</td><td>Not a career software engineer. Eng + GTM/content/community/investing pattern; one backend API internship bullet is not ownership.</td></tr><tr><td>David Oy</td><td>Soft Flag</td><td>~61</td><td>Strong ML systems/inference credibility, but wrong archetype. Probe only if pool is weak.</td></tr><tr><td>Ian Carrasco</td><td>No</td><td>~47</td><td>ML engineering and voice AI inference specialization; FlutterFlow product exposure is short and not enough to prove API ownership.</td></tr></tbody></table></div>
+<h3>Baseten Company Assessment</h3>
+<p>Baseten should be deprioritized as an active sourcing target for this TRM search.</p>
+<p>Why:</p>
+<ul>
+<li>Four profiles reviewed, zero advances.</li>
+<li>Talent appears to skew toward ML infrastructure, inference systems, performance engineering, and Forward Deployed Engineering.</li>
+<li>Those are strong technical profiles, but they do not map cleanly to TRM's full-stack product/API ownership need.</li>
+</ul>
+<p>This is a structural company/search mismatch, not a criticism of the company or candidates.</p>
+<p>Working rule:</p>
+<p>&gt; Forward Deployed Engineer at AI infrastructure companies often means ML/performance/customer deployment work, not product API engineering. Validate carefully before advancing.</p>
+<h3>Updated Stack Rank After 12 Candidates</h3>
+<div class="table-wrap"><table><thead><tr><th>Rank</th><th>Candidate</th><th>Score</th><th>Verdict</th></tr></thead><tbody><tr><td>1</td><td>Valyo Y.</td><td>~98</td><td>Advance</td></tr><tr><td>2</td><td>Adrian Pasqualini</td><td>~91</td><td>Advance — validate YOE</td></tr><tr><td>3</td><td>Lavanya Kannan</td><td>~81</td><td>Advance — probe Vanta scope</td></tr><tr><td>4</td><td>Isabelle Zhou</td><td>~71</td><td>Hold</td></tr><tr><td>5</td><td>Mike Luo</td><td>~67</td><td>Soft Flag</td></tr><tr><td>6</td><td>June Xu</td><td>~66</td><td>Hold — probe</td></tr><tr><td>7</td><td>David Oy</td><td>~61</td><td>Soft Flag — wrong archetype</td></tr><tr><td>8</td><td>Andrew DiCarlo</td><td>~58</td><td>Pass</td></tr><tr><td>9</td><td>Neha Gupta</td><td>~57</td><td>Pass</td></tr><tr><td>10</td><td>Ian Carrasco</td><td>~47</td><td>Pass</td></tr><tr><td>11</td><td>Kiran Kunigiri</td><td>~48</td><td>Pass</td></tr><tr><td>12</td><td>Christopher Wirick</td><td>~44</td><td>Pass</td></tr><tr><td>13</td><td>Alex Ker</td><td>DQ</td><td>Not an engineer</td></tr></tbody></table></div>
+<h3>Emerging Pattern At 12 Candidates</h3>
+<p>Advances cluster around:</p>
+<ul>
+<li>identity/security product engineers,</li>
+<li>fintech/product workflow engineers,</li>
+<li>technical leads with startup/product ownership,</li>
+<li>vendor risk / compliance workflow adjacency.</li>
+</ul>
+<p>False positives cluster around:</p>
+<ul>
+<li>ML infrastructure,</li>
+<li>data pipelines,</li>
+<li>forward-deployed AI/inference roles,</li>
+<li>client deployment or GTM-adjacent technical roles,</li>
+<li>company signal without product/API evidence.</li>
+</ul>
+<h3>Search Adjustment</h3>
+<p>Remove Baseten from active sourcing for now.</p>
+<p>Redirect effort to:</p>
+<ul>
+<li>Glean</li>
+<li>Vannevar Labs</li>
+<li>Ramp</li>
+<li>Vanta, but only with stronger team/function evidence</li>
+<li>Metronome / Hex only where team terms match API/product/data workflow ownership</li>
+<li>Chainguard / Drata / Cyera for security/compliance product profiles</li>
+</ul>
+<h3>Tool / Agent Update</h3>
+<p>Evaluator should:</p>
+<ul>
+<li>Treat "Forward Deployed Engineer" at AI infra companies as a caution signal, not an automatic product/customer signal.</li>
+<li>Down-rank ML infra/performance profiles unless there is visible API/product/full-stack ownership.</li>
+<li>Separate "technical depth" from "role fit." A strong ML systems engineer can still be a No for TRM.</li>
+<li>Add false-positive risk: ML infra / inference engineer, not full-stack product/API owner.</li>
+</ul>
+<h3>Calibration Event 3: Full Codex Tool Review</h3>
+<p>Source: <code>TRM_CODEX_CALIBRATION_2026-05-21.md</code> and <code>trm-candidate-review-log-2026-05-21.csv</code></p>
+<h4>System-Level Fixes</h4>
+<p>The tool was still making four systematic errors:</p>
+<ol>
+<li>Keyword scoring over functional judgment.</li>
+<li>Company tier treated as evidence rather than review prior.</li>
+<li>False-positive flags did not cap verdicts.</li>
+<li>Frontend engineers and AI infra/FDE profiles could still score too high.</li>
+</ol>
+<p>Working rule:</p>
+<p>&gt; Functional archetype comes before score. If the archetype is wrong, keywords cannot rescue the profile.</p>
+<h4>Candidate Corrections</h4>
+<div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Tool</th><th>Calibrated</th><th>Lesson</th></tr></thead><tbody><tr><td>Andrew DiCarlo</td><td>97 Strong Yes</td><td>~58 No</td><td>Enterprise/client feature delivery is not API product ownership.</td></tr><tr><td>Jon Anderson</td><td>99 Strong Yes</td><td>~41 Def No</td><td>Self-described frontend engineer should not pass for API/backend role.</td></tr><tr><td>Srishti Hegde</td><td>85 Soft Flag</td><td>~44 No</td><td>IAM analyst/GRC exposure is not engineering ownership.</td></tr><tr><td>Zackary Crosley</td><td>75 Soft Flag</td><td>~78 Yes</td><td>Security product APIs at Censys are real product/API ownership.</td></tr><tr><td>Kevin M.</td><td>96 Soft Flag</td><td>~63 Hold</td><td>Government/mission signal is real, but startup velocity and backend depth need validation.</td></tr><tr><td>Tiago Ferreira</td><td>73 Soft Flag</td><td>~88 Strong Yes</td><td>Stripe Fraud Engineering is a strong fraud/risk/backend product archetype, not ML infra.</td></tr><tr><td>Sabrina Liu</td><td>87 Soft Flag</td><td>~81 Yes</td><td>Agent Frameworks/Data Orchestration/Connect controls are product/platform evidence, not FDE.</td></tr><tr><td>Andy Tang</td><td>73 Yes</td><td>~48 No</td><td>Change Data Capture and Stripe API usage are infra/API-consumer signals, not product API ownership.</td></tr><tr><td>Lavanya Kannan</td><td>75</td><td>~81 Yes</td><td>Practitioner bullets like low-latency connectors and full product lifecycle deserve boost.</td></tr></tbody></table></div>
+<h4>Rubric Updates</h4>
+<p>Implement:</p>
+<ul>
+<li>Classify functional archetype before score:</li>
+</ul>
+<p>  - product/API/full-stack</p>
+<p>  - fraud/risk/security product</p>
+<p>  - ML/data/infra</p>
+<p>  - frontend</p>
+<p>  - non-engineering/GTM</p>
+<p>  - unclear</p>
+<ul>
+<li>Active false-positive flag caps verdict at Soft Flag unless the profile explicitly resolves it.</li>
+<li>Frontend-primary identity gets a heavy penalty and cannot advance for this role.</li>
+<li>Fraud/risk/security product engineering is a valid TRM archetype and should not trigger ML/FDE caution.</li>
+<li>Generic phrases like "backend experience" or "worked with APIs" are weak without ownership language.</li>
+<li>Practitioner phrases like "owned public API," "designed REST API surface," "full product lifecycle," "fraud detection," "risk scoring," and "SDK ownership" should carry more weight.</li>
+</ul>
+<h4>Final Human-Validated Stack Rank</h4>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>Candidate</th><th>Human Score</th><th>Verdict</th></tr></thead><tbody><tr><td>1</td><td>Valyo Y.</td><td>~98</td><td>Advance</td></tr><tr><td>2</td><td>Jinhao Ping</td><td>~93</td><td>Advance</td></tr><tr><td>3</td><td>Tiago Ferreira</td><td>~88</td><td>Advance</td></tr><tr><td>4</td><td>Hans Bala</td><td>~91</td><td>Advance</td></tr><tr><td>5</td><td>Adrian Pasqualini</td><td>~91</td><td>Advance — validate YOE</td></tr><tr><td>6</td><td>Chak Man Li</td><td>~90</td><td>Advance</td></tr><tr><td>7</td><td>Yangyu Shu</td><td>~87</td><td>Advance</td></tr><tr><td>8</td><td>Sabrina Liu</td><td>~81</td><td>Advance</td></tr><tr><td>9</td><td>Lavanya Kannan</td><td>~81</td><td>Advance — probe</td></tr><tr><td>10</td><td>Ema Milojkovic</td><td>~82</td><td>Advance — probe</td></tr><tr><td>11</td><td>Evan Gabrielson</td><td>~78</td><td>Advance</td></tr><tr><td>12</td><td>Zackary Crosley</td><td>~78</td><td>Advance</td></tr><tr><td>13</td><td>Dan A.</td><td>~78</td><td>Advance</td></tr><tr><td>14</td><td>Isabelle Zhou</td><td>~71</td><td>Hold</td></tr><tr><td>15</td><td>Mike Luo</td><td>~67</td><td>Soft Flag</td></tr><tr><td>16</td><td>June Xu</td><td>~66</td><td>Hold — probe</td></tr><tr><td>17</td><td>Nikhil Birmiwal</td><td>~64</td><td>Soft Flag</td></tr><tr><td>18</td><td>Kevin M.</td><td>~63</td><td>Hold — probe</td></tr><tr><td>—</td><td>Andrew DiCarlo</td><td>~58</td><td>Pass</td></tr><tr><td>—</td><td>Srishti Hegde</td><td>~44</td><td>Pass</td></tr><tr><td>—</td><td>Jon Anderson</td><td>~41</td><td>Def No</td></tr><tr><td>—</td><td>Andy Tang</td><td>~48</td><td>Pass</td></tr></tbody></table></div></main></body></html>

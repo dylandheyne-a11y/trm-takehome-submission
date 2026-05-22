@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRM Candidate Review Workstation</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --ink: #171a21;
+      --muted: #5f6673;
+      --line: #dfe3ea;
+      --panel: #ffffff;
+      --soft: #eef3f8;
+      --blue: #2457d6;
+      --teal: #047d75;
+      --amber: #9a5b00;
+      --rose: #b42318;
+      --green: #116b3a;
+      --shadow: 0 18px 60px rgba(20, 31, 49, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+    main { max-width: 1280px; margin: 0 auto; padding: 36px 28px 72px; }
+    header {
+      padding: 34px;
+      background: linear-gradient(135deg, #ffffff 0%, #eef4ff 58%, #eef9f5 100%);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+    .eyebrow { font-size: 12px; font-weight: 780; color: var(--blue); letter-spacing: .08em; text-transform: uppercase; }
+    h1 { font-size: clamp(32px, 5vw, 52px); line-height: 1; letter-spacing: 0; margin: 10px 0 12px; }
+    header p { max-width: 840px; color: #344054; font-size: 17px; margin: 0; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr); gap: 18px; align-items: start; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 36px rgba(20, 31, 49, .05);
+      padding: 22px;
+    }
+    h2 { margin: 0 0 12px; font-size: 22px; letter-spacing: 0; }
+    h3 { margin: 20px 0 8px; font-size: 15px; letter-spacing: 0; }
+    label { display: block; font-size: 13px; font-weight: 720; color: #344054; margin: 12px 0 6px; }
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 11px 12px;
+      font: inherit;
+      color: var(--ink);
+      background: #fbfcfe;
+    }
+    textarea { min-height: 260px; resize: vertical; }
+    .row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    button, a.button {
+      border: 0;
+      background: var(--blue);
+      color: white;
+      border-radius: 10px;
+      padding: 10px 13px;
+      font-weight: 760;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+    button.secondary, a.button.secondary { background: #e8eefc; color: var(--blue); }
+    button.ghost { background: #eef1f5; color: #344054; }
+    .score {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 18px;
+      align-items: center;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: #fbfcfe;
+      border-radius: 14px;
+    }
+    .score-num {
+      width: 92px;
+      height: 92px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e8eefc;
+      color: var(--blue);
+      font-size: 28px;
+      font-weight: 850;
+    }
+    .score-title { font-weight: 820; font-size: 18px; margin-bottom: 4px; }
+    .muted { color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 14px; }
+    th {
+      text-align: left;
+      color: #344054;
+      background: #f2f5f9;
+      border-bottom: 1px solid var(--line);
+      padding: 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    td { border-bottom: 1px solid var(--line); padding: 10px; vertical-align: top; color: #3b4350; }
+    tr:last-child td { border-bottom: 0; }
+    .pill {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef3f8;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 720;
+      margin: 3px 4px 3px 0;
+    }
+    .pill.good { background: #e8f5ee; color: var(--green); }
+    .pill.warn { background: #fff2d8; color: var(--amber); }
+    .pill.bad { background: #ffe9e7; color: var(--rose); }
+    .callout {
+      border: 1px solid #c9d7ff;
+      background: #f5f8ff;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin: 14px 0;
+      color: #25304b;
+      font-size: 14px;
+    }
+    pre {
+      background: #121826;
+      color: #dbe4f0;
+      padding: 14px;
+      border-radius: 12px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .links { display: grid; gap: 8px; }
+    .links a { color: var(--blue); word-break: break-word; }
+    .small { font-size: 12px; color: var(--muted); }
+    .log-table-wrap { overflow-x: auto; }
+    .log-table td, .log-table th { white-space: nowrap; }
+    @media (max-width: 980px) {
+      .layout, .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">TRM Labs · Candidate Review</div>
+      <h1>Paste once. Score fast.</h1>
+      <p>Manual LinkedIn review stays human-owned, but this workstation turns a profile blob into a rubric score, X-ray queries, risk flags, outreach hooks, and a CSV row for your tracker.</p>
+    </header>
+
+    <div class="layout">
+      <section class="panel">
+        <h2>Profile Input</h2>
+        <div class="row">
+          <div>
+            <label for="name">Candidate name</label>
+            <input id="name" placeholder="Jane Doe">
+          </div>
+          <div>
+            <label for="company">Current company</label>
+            <input id="company" placeholder="Vanta">
+          </div>
+        </div>
+        <label for="profileUrl">LinkedIn / profile URL</label>
+        <input id="profileUrl" placeholder="https://www.linkedin.com/in/...">
+        <div class="row">
+          <div>
+            <label for="title">Current title</label>
+            <input id="title" placeholder="Senior Software Engineer">
+          </div>
+          <div>
+            <label for="location">Location</label>
+            <input id="location" placeholder="New York, NY">
+          </div>
+        </div>
+        <label for="profile">Paste LinkedIn/profile notes</label>
+        <textarea id="profile" placeholder="Paste profile summary, experience, education, skills, company/team notes, visible tenure, projects, etc."></textarea>
+
+        <div class="row">
+          <div>
+            <label for="companyTier">Company source</label>
+            <select id="companyTier">
+              <option value="unknown">Unknown / needs research</option>
+              <option value="primary">Primary company target</option>
+              <option value="team">Team-targeted company</option>
+              <option value="expansion">Expansion company</option>
+              <option value="deprioritized">Deprioritized for this search</option>
+            </select>
+          </div>
+          <div>
+            <label for="teamLane">Team lane</label>
+            <select id="teamLane">
+              <option value="">Select if known</option>
+              <option>API / Developer Platform</option>
+              <option>Product Platform / Shared Capabilities</option>
+              <option>Identity / Access / Permissions</option>
+              <option>Billing / Usage / Metering</option>
+              <option>Enterprise Workflow / Admin Product</option>
+              <option>Data / Search / Knowledge Systems</option>
+              <option>Security / Trust / Compliance Product</option>
+              <option>Reliability / Observability / Production Systems</option>
+              <option>Applied AI / Customer Deployment</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="secondary" onclick="parseProfile()">Parse pasted profile</button>
+          <button onclick="scoreProfile()">Score profile</button>
+          <button class="secondary" onclick="copySummary()">Copy HM summary</button>
+          <button class="secondary" onclick="copyCsv()">Copy CSV row</button>
+          <button class="secondary" onclick="downloadLog()">Download log CSV</button>
+          <button class="ghost" onclick="clearForm()">Clear</button>
+        </div>
+        <label style="display:flex;gap:8px;align-items:center;font-weight:600;margin-top:12px">
+          <input id="autoClear" type="checkbox" style="width:auto">
+          Clear input automatically after scoring
+        </label>
+        <p class="small">URL-only mode can store the link and generate X-ray searches, but scoring needs pasted profile text or manually filled fields. No scraping, no network calls.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Score</h2>
+        <div class="score">
+          <div class="score-num" id="scoreNum">--</div>
+          <div>
+            <div class="score-title" id="scoreTitle">Not scored</div>
+            <div class="muted" id="scoreNote">Paste a profile and score it.</div>
+          </div>
+        </div>
+
+        <h3>Rubric Breakdown</h3>
+        <table>
+          <thead><tr><th>Signal</th><th>Score</th><th>Evidence</th></tr></thead>
+          <tbody id="breakdown"></tbody>
+        </table>
+
+        <h3>Flags</h3>
+        <div id="flags"><span class="pill warn">Waiting for profile</span></div>
+
+        <h3>X-ray Search Links</h3>
+        <div class="links" id="links"></div>
+      </section>
+    </div>
+
+    <section class="panel" style="margin-top:18px">
+      <h2>Output</h2>
+      <div class="row">
+        <div>
+          <h3>HM-ready summary</h3>
+          <pre id="summary">Score a profile to generate a concise candidate note.</pre>
+        </div>
+        <div>
+          <h3>Tracker CSV row</h3>
+          <pre id="csv">Score a profile to generate a CSV row.</pre>
+        </div>
+      </div>
+      <div class="callout"><strong>Suggested workflow:</strong> paste LinkedIn profile → score → open X-ray links if needed → copy CSV row into Google Sheets → keep only top 10-12 for deeper review → final 5 go into the HM Slack slate.</div>
+    </section>
+
+    <section class="panel" style="margin-top:18px">
+      <h2>Review Log</h2>
+      <p class="muted">Each scored candidate is saved locally in this browser. Use Download Log CSV when you want to move the batch into Sheets.</p>
+      <div class="actions">
+        <button class="secondary" onclick="downloadLog()">Download log CSV</button>
+        <button class="ghost" onclick="removeLastLogEntry()">Remove last row</button>
+        <button class="ghost" onclick="clearLog()">Clear log</button>
+      </div>
+      <div class="log-table-wrap">
+        <table class="log-table">
+          <thead><tr><th>#</th><th>Score</th><th>Verdict</th><th>Name</th><th>Title</th><th>Company</th><th>Location</th><th>Team lane</th><th>Flags</th><th>Action</th></tr></thead>
+          <tbody id="logRows"></tbody>
+        </table>
+      </div>
+      <h3>Selected Candidate Analysis</h3>
+      <pre id="selectedAnalysis">Click View on a logged candidate to see the decision rationale.</pre>
+    </section>
+  </main>
+
+  <script>
+    const groups = [
+      {
+        key: "ownership",
+        label: "End-to-end ownership",
+        weight: 25,
+        terms: ["owned", "led", "launched", "built", "architected", "designed", "end-to-end", "0 to 1", "technical lead", "tech lead", "project lead", "roadmap", "from scratch"]
+      },
+      {
+        key: "startup",
+        label: "Company prior / high-growth signal",
+        weight: 10,
+        terms: ["ramp", "vanta", "langchain", "baseten", "modal", "modal labs", "linear", "metronome", "hex", "merge", "chainguard", "drata", "cyera", "glean", "harvey", "decagon", "startup", "founding", "series a", "series b", "series c", "venture-backed"]
+      },
+      {
+        key: "technical",
+        label: "Technical depth",
+        weight: 25,
+        terms: ["api", "backend", "platform", "service", "services", "postgres", "sql", "database", "distributed", "performance", "reliability", "typescript", "node", "react", "data pipeline", "integration", "integrations"]
+      },
+      {
+        key: "fullstack",
+        label: "Full-stack product range",
+        weight: 15,
+        terms: ["full stack", "full-stack", "frontend", "front-end", "backend", "react", "product", "dashboard", "admin", "workflow", "customer-facing", "internal tools", "ui", "ux"]
+      },
+      {
+        key: "tenure",
+        label: "Tenure / progression",
+        weight: 10,
+        terms: ["senior", "staff", "principal", "lead", "manager", "promoted", "2 years", "3 years", "4 years", "5 years", "2019", "2020", "2021", "2022"]
+      },
+      {
+        key: "comms",
+        label: "Comms / mission / hireability boosters",
+        weight: 15,
+        terms: ["stakeholder", "pm", "product manager", "design", "customer", "docs", "documentation", "mentor", "mentored", "cs", "computer science", "m.s.", "mscs", "open source", "security", "compliance", "risk", "fraud", "fintech"]
+      }
+    ];
+
+    const teamTerms = {
+      "API / Developer Platform": ["api", "developer platform", "developer experience", "devx", "sdk", "console", "workbench"],
+      "Product Platform / Shared Capabilities": ["product platform", "product foundations", "foundations", "shared", "ui platform"],
+      "Identity / Access / Permissions": ["identity", "auth", "authentication", "authorization", "access control", "permissions", "sso", "scim", "oauth"],
+      "Billing / Usage / Metering": ["billing", "metering", "usage", "rate cards", "invoicing", "monetization", "contracts", "credits"],
+      "Enterprise Workflow / Admin Product": ["admin", "enterprise", "workflow", "internal tools", "integrations", "customer platform"],
+      "Data / Search / Knowledge Systems": ["search", "retrieval", "knowledge graph", "connectors", "indexing", "data platform", "analytics"],
+      "Security / Trust / Compliance Product": ["trust", "security", "compliance", "grc", "risk", "supply chain", "vulnerability"],
+      "Reliability / Observability / Production Systems": ["reliability", "observability", "performance", "latency", "compute", "ci/cd"],
+      "Applied AI / Customer Deployment": ["applied ai", "customer engineering", "forward deployed", "solutions", "deployment", "evaluation", "agent"]
+    };
+
+    let lastResult = null;
+    const LOG_KEY = "trmCandidateReviewLogV1";
+
+    function val(id) { return document.getElementById(id).value.trim(); }
+    function setIfEmpty(id, value) {
+      const el = document.getElementById(id);
+      if (!el.value.trim() && value) el.value = value;
+    }
+    function csvEscape(x) { return `"${String(x || "").replaceAll('"', '""')}"`; }
+    function termHits(text, terms) {
+      return terms.filter(t => text.includes(t.toLowerCase()));
+    }
+
+    function cleanLine(line) {
+      return line.replace(/\s+/g, " ").replace(/^[-•·]\s*/, "").trim();
+    }
+
+    function parseProfile() {
+      const raw = val("profile");
+      const url = val("profileUrl");
+      const lines = raw.split(/\n+/).map(cleanLine).filter(Boolean);
+      const text = [raw, url].join(" ").toLowerCase();
+
+      const currentCompanyTerms = [
+        "current company", "company", "works at", " at ", "current:"
+      ];
+
+      const titleTerms = [
+        "software engineer", "senior software engineer", "staff software engineer",
+        "principal software engineer", "full stack engineer", "full-stack engineer",
+        "product engineer", "backend engineer", "platform engineer", "tech lead",
+        "technical lead"
+      ];
+
+      const locationPatterns = [
+        /(?:location|based in|lives in)\s*:?\s*([A-Z][A-Za-z .,-]+(?:Area|CA|NY|WA|TX|CO|MA|IL|DC|United States|USA)?)/i,
+        /(New York(?: City)?(?: Metropolitan Area)?|San Francisco Bay Area|Greater Seattle Area|Los Angeles Metropolitan Area|Austin, Texas|Denver Metropolitan Area|Greater Boston|Chicago|Washington DC|United States|Remote)/i
+      ];
+
+      let guessedName = "";
+      let guessedTitle = "";
+      let guessedCompany = "";
+      let guessedLocation = "";
+
+      // Name: first non-noise line is usually the LinkedIn profile heading.
+      const noise = /^(experience|about|activity|education|skills|contact info|message|connect|follow|more|highlights|people also viewed|suggested outreach hook|lead with|software engineer|senior software engineer)$/i;
+      for (const line of lines.slice(0, 8)) {
+        const lower = line.toLowerCase();
+        const looksLikeName = /^[A-Z][A-Za-z.'-]+(?:\s+[A-Z][A-Za-z.'-]+){1,3}$/.test(line);
+        if (looksLikeName && !noise.test(line) && !titleTerms.some(t => lower.includes(t)) && !/united states|remote|followers|connections|suggested|outreach|platform|experience/i.test(line)) {
+          guessedName = line;
+          break;
+        }
+      }
+
+      // Title/company patterns common in copied LinkedIn text.
+      for (const line of lines.slice(0, 20)) {
+        const lower = line.toLowerCase();
+        if (!guessedTitle && titleTerms.some(t => lower.includes(t))) {
+          guessedTitle = line.split(" at ")[0].split(" @ ")[0].replace(/\s+\|\s+.*/, "").trim();
+        }
+        if (!guessedCompany) {
+          let m = line.match(/\b(?:at|@)\s+([A-Z][A-Za-z0-9&.,\- ]{2,50})/);
+          if (m) guessedCompany = m[1].replace(/\s+\|\s+.*/, "").trim();
+        }
+        if (!guessedCompany && currentCompanyTerms.some(t => lower.includes(t))) {
+          const parts = line.split(/ at | @ |:|·|\|/).map(cleanLine).filter(Boolean);
+          const candidate = parts.find(p => /^[A-Z][A-Za-z0-9&.,\- ]{2,50}$/.test(p) && !titleTerms.some(t => p.toLowerCase().includes(t)));
+          if (candidate) guessedCompany = candidate;
+        }
+      }
+
+      // Experience blocks often put title then company on adjacent lines.
+      for (let i = 0; i < lines.length - 1; i++) {
+        const lower = lines[i].toLowerCase();
+        if (!guessedTitle && titleTerms.some(t => lower.includes(t))) {
+          guessedTitle = lines[i];
+        }
+        if (!guessedCompany && titleTerms.some(t => lower.includes(t))) {
+          const next = lines[i + 1];
+          if (/^[A-Z][A-Za-z0-9&.,\- ]{2,50}$/.test(next) && !/full-time|part-time|self-employed|contract/i.test(next)) {
+            guessedCompany = next;
+          }
+        }
+      }
+
+      for (const pattern of locationPatterns) {
+        const m = raw.match(pattern);
+        if (m) {
+          guessedLocation = cleanLine(m[1] || m[0]);
+          break;
+        }
+      }
+
+      setIfEmpty("name", guessedName);
+      setIfEmpty("title", guessedTitle);
+      setIfEmpty("company", guessedCompany);
+      setIfEmpty("location", guessedLocation);
+
+      if (!document.getElementById("name").value.trim() && !guessedName && url) {
+        const slug = url.match(/linkedin\.com\/in\/([^/?#]+)/i);
+        if (slug) {
+          setIfEmpty("name", slug[1].replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase()));
+        }
+      }
+
+      // Company source auto-suggest from guide.
+      const primary = ["ramp", "vanta", "modal", "modal labs", "langchain", "linear", "pinecone", "vannevar", "applied intuition", "merge"];
+      const team = ["metronome", "hex", "openai", "anthropic", "cursor", "glean", "decagon", "harvey", "together ai", "fireworks", "warp", "cognition", "factory"];
+      const expansion = ["chainguard", "drata", "cyera", "wiz", "panther", "semgrep", "faire", "whatnot"];
+      const deprioritized = ["baseten"];
+      const companyGuess = [document.getElementById("company").value, guessedCompany, raw].join(" ").toLowerCase();
+      if (deprioritized.some(c => companyGuess.includes(c))) document.getElementById("companyTier").value = "deprioritized";
+      else if (primary.some(c => companyGuess.includes(c))) document.getElementById("companyTier").value = "primary";
+      else if (team.some(c => companyGuess.includes(c))) document.getElementById("companyTier").value = "team";
+      else if (expansion.some(c => companyGuess.includes(c))) document.getElementById("companyTier").value = "expansion";
+
+      // Team lane auto-suggest.
+      if (!/forward deployed|fde|inference|model serving|ml platform|machine learning infrastructure|kubernetes|kafka|airflow|feature store|triton|voice ai/.test(text)) for (const [lane, terms] of Object.entries(teamTerms)) {
+        if (termHits(text, terms).length > 0) {
+          document.getElementById("teamLane").value = lane;
+          break;
+        }
+      }
+
+      return {
+        name: document.getElementById("name").value,
+        title: document.getElementById("title").value,
+        company: document.getElementById("company").value,
+        location: document.getElementById("location").value
+      };
+    }
+
+    function scoreProfile() {
+      parseProfile();
+      const name = val("name");
+      const company = val("company");
+      const title = val("title");
+      const location = val("location");
+      const profileUrl = val("profileUrl");
+      const profile = val("profile");
+      const companyTier = val("companyTier");
+      const teamLane = val("teamLane");
+      const text = [name, company, title, location, profile, teamLane].join(" ").toLowerCase();
+
+      let total = 0;
+      const rows = [];
+
+      for (const g of groups) {
+        const hits = termHits(text, g.terms);
+        let ratio = Math.min(1, hits.length / 4);
+        if (g.key === "startup" && companyTier === "primary") ratio = Math.max(ratio, .8);
+        if (g.key === "startup" && companyTier === "team") ratio = Math.max(ratio, .65);
+        if (g.key === "startup" && companyTier === "unknown") ratio = Math.min(ratio, .45);
+        if (g.key === "startup" && companyTier === "deprioritized") ratio = Math.min(ratio, .25);
+        const points = Math.round(g.weight * ratio);
+        total += points;
+        rows.push({ label: g.label, points, weight: g.weight, hits });
+      }
+
+      if (teamLane) {
+        const hits = termHits(text, teamTerms[teamLane] || []);
+        if (hits.length > 0) {
+          total = Math.min(100, total + 5);
+          rows.push({ label: "Team-lane match bonus", points: 5, weight: 5, hits });
+        } else {
+          rows.push({ label: "Team-lane match bonus", points: 0, weight: 5, hits: ["selected lane not visible in pasted profile"] });
+        }
+      }
+
+      const flags = [];
+      const hasStrongPrior = companyTier === "primary" || (companyTier === "team" && !!teamLane);
+      const hasTeamSignal = !!teamLane;
+      const hasTechnicalSignal = /api|backend|platform|postgres|database|service|typescript|node|react|integration|developer|billing|metering|security|compliance|search|data/.test(text);
+      const hasSenioritySignal = /senior|staff|principal|lead|5 years|6 years|7 years|8 years|9 years|10 years/.test(text);
+      if (!/united states| usa| u\.s\.|new york|san francisco|bay area|seattle|austin|denver|boston|los angeles|chicago|remote/.test(text)) flags.push({ type: "warn", text: "US location/citizenship needs validation" });
+      if (!hasSenioritySignal) flags.push({ type: "warn", text: "Seniority / 5+ years not obvious" });
+      const hasApiProductOwnership = /public api|api product|developer platform|api platform|designed .*api|owned .*api|built .*api|owned .*sdk|authored .*sdk|api gateway|sdk ownership|external developer|customer-facing api|grpc gateway|third-party integrations|exposure management|oauth api|rest api surface/.test(text);
+      const hasPractitionerProductEvidence = /full product lifecycle|end-to-end from requirements|owned .*public|designed .*rest api|fraud detection|risk scoring|risk engine|payment risk|payments risk|freeze assets|fraudulent merchants|low-latency .*connectors|market connectors|reconciliation engine|credits\/billing|credits and billing|postgres datastore|grpc gateway|sdk ownership|oauth api design/.test(text);
+      const hasFraudRiskSecurityProduct = /fraud engineering|fraud detection|risk scoring|payment risk|payments risk|financial crime|freeze assets|fraudulent merchants|security api|security product|exposure management|vulnerability management|censys|chainguard|stripe fraud|stripe connect/.test(text);
+      const hasFrontendPrimary = /lead front end developer|lead frontend developer|front end developer|frontend developer|front-end developer|ui developer|react specialist|frontend engineer|front-end engineer/.test(text);
+      const hasNonEngineerPattern = /gtm|growth|content|community|investor|investing fellowship|venture fellow|marketing|business development/.test(text) && !/software engineer|backend engineer|full stack engineer|full-stack engineer|staff engineer|senior software engineer/.test(text);
+      const hasClientFeaturePattern = /client|customer request|implementation|implemented|feature request|professional services|solutions|fedramp|qualtrics/.test(text) && !hasApiProductOwnership;
+      const hasApiConsumerPattern = /used .*api|using .*api|integrated .*api|stripe api|called .*api|consumed .*api/.test(text) && !hasApiProductOwnership;
+      const hasMlInfraPattern = /forward deployed|fde|inference|model serving|ml platform|machine learning infrastructure|kubernetes|kafka|airflow|feature store|triton|nvidia|baseten|voice ai|change data capture|data replication/.test(text) && !hasApiProductOwnership && !hasFraudRiskSecurityProduct;
+      if (hasPractitionerProductEvidence) total = Math.min(100, total + 8);
+      if (hasFrontendPrimary) total = Math.max(0, total - 30);
+      if (hasMlInfraPattern) total = Math.max(0, total - 22);
+      if (hasNonEngineerPattern) total = Math.max(0, total - 35);
+      if (hasApiConsumerPattern) total = Math.max(0, total - 15);
+      if (!hasTechnicalSignal && hasStrongPrior) flags.push({ type: "warn", text: "Technical/API evidence not visible; validate with probe" });
+      if (hasClientFeaturePattern) flags.push({ type: "warn", text: "Client-feature / implementation pattern; validate API product ownership" });
+      if (hasMlInfraPattern) flags.push({ type: "warn", text: "ML infra/FDE pattern; validate product API/full-stack ownership" });
+      if (hasFrontendPrimary) flags.push({ type: "bad", text: "Frontend-primary profile; wrong archetype for TRM API/backend role" });
+      if (hasApiConsumerPattern) flags.push({ type: "warn", text: "Possible API consumer rather than API builder" });
+      if (hasNonEngineerPattern) flags.push({ type: "bad", text: "GTM/content/investing pattern; not a sustained SWE profile" });
+      if (companyTier === "deprioritized") flags.push({ type: "warn", text: "Company currently deprioritized for this search after calibration" });
+      if (!hasTechnicalSignal && !hasStrongPrior) flags.push({ type: "bad", text: "Technical/API evidence weak in pasted text" });
+      if (!/2 years|3 years|4 years|5 years|2019|2020|2021|2022/.test(text)) flags.push({ type: "warn", text: "Tenure pattern needs manual check" });
+      if (/chainalysis|elliptic|ciphertrace|trm labs/.test(text)) flags.push({ type: "bad", text: "Possible competitor/current-company conflict" });
+      if (flags.length === 0) flags.push({ type: "good", text: "No obvious first-pass flags" });
+
+      const activeDQ = flags.some(f => f.text.includes("competitor"));
+      let verdict = "No";
+      if (activeDQ || hasFrontendPrimary || hasNonEngineerPattern) verdict = "Def No";
+      else if (hasApiConsumerPattern && !hasApiProductOwnership) verdict = total >= 60 ? "Soft Flag" : "No";
+      else if (hasClientFeaturePattern && !hasApiProductOwnership) verdict = total >= 60 ? "Soft Flag" : "No";
+      else if (hasMlInfraPattern && !hasApiProductOwnership) verdict = total >= 60 ? "Soft Flag" : "No";
+      else if (companyTier === "deprioritized" && !hasApiProductOwnership) verdict = total >= 60 ? "Soft Flag" : "No";
+      else if (total >= 82 && hasTechnicalSignal && hasSenioritySignal) verdict = "Strong Yes";
+      else if (total >= 68 && (hasTechnicalSignal || hasStrongPrior) && !hasClientFeaturePattern && !hasMlInfraPattern) verdict = "Yes";
+      else if (hasStrongPrior || total >= 52) verdict = "Soft Flag";
+      else verdict = "No";
+
+      const recommendation = verdict;
+      const note = verdict === "Strong Yes" ? "Prioritize for deeper validation or slate consideration." :
+        verdict === "Yes" ? "Advance to deeper review; validate the top unknowns." :
+        verdict === "Soft Flag" ? "Promising archetype from thin sourcing data; validate with a probe." :
+        verdict === "Def No" ? "Active disqualifier present." :
+        "Low priority unless missing context changes the picture.";
+
+      renderBreakdown(rows);
+      renderFlags(flags);
+      renderLinks(name, company, title, teamLane);
+
+      const evidence = rows
+        .filter(r => r.hits.length)
+        .slice(0, 4)
+        .map(r => `${r.label}: ${r.hits.slice(0, 4).join(", ")}`)
+        .join("; ");
+
+      const archetype = inferArchetype(teamLane, text);
+      const falsePositiveRisk = inferFalsePositiveRisk(text, hasTechnicalSignal, hasStrongPrior);
+      const builtAnalysis = inferBuiltAnalysis(rows, evidence, hasTechnicalSignal, hasStrongPrior, teamLane);
+      const unknowns = [
+        !/united states| usa| u\.s\.|new york|san francisco|bay area|seattle|austin|denver|boston|los angeles|chicago|remote/.test(text) ? "US location/citizenship" : "",
+        !hasSenioritySignal ? "seniority / 5+ years" : "",
+        !hasTechnicalSignal ? "actual backend/API ownership" : "",
+        !/2 years|3 years|4 years|5 years|2019|2020|2021|2022/.test(text) ? "tenure pattern" : ""
+      ].filter(Boolean).join("; ") || "No major first-pass unknowns";
+      const hireabilityRead = inferHireability(companyTier, text, total);
+      const nextStep = verdict === "Strong Yes" || verdict === "Yes" ? "Advance to deeper validation and consider for slate." :
+        verdict === "Soft Flag" ? "Keep in longlist; send/prepare probe to validate hidden depth." :
+        verdict === "Def No" ? "Pass and log disqualifier." :
+        "Pass unless additional evidence appears.";
+      const probe = makeProbe(name, company, teamLane, archetype);
+      const csvAnalysis = `${verdict}: ${builtAnalysis} Unknowns: ${unknowns}. False-positive risk: ${falsePositiveRisk}. Next step: ${nextStep}`;
+
+      const summary = `${name || "[Name]"} — ${title || "[Title]"} at ${company || "[Company]"} (${location || "location unknown"})
+
+Verdict: ${verdict} (${total}/100)
+Archetype: ${archetype}
+
+Why they may fit TRM:
+- ${builtAnalysis}
+- Company/team signal: ${companyTier}${teamLane ? `; ${teamLane}` : ""}
+
+Risks / validation needed:
+${flags.map(f => `- ${f.text}`).join("\n")}
+
+False-positive risk:
+- ${falsePositiveRisk}
+
+Hireability read:
+- ${hireabilityRead}
+
+Recommended next step:
+- ${nextStep}
+
+Suggested outreach hook:
+${probe}`;
+
+      const csvFields = [
+        name, title, company, location, profileUrl, companyTier, teamLane, total, recommendation,
+        rows.map(r => `${r.label}:${r.points}/${r.weight}`).join(" | "),
+        flags.map(f => f.text).join(" | "),
+        evidence,
+        archetype,
+        builtAnalysis,
+        falsePositiveRisk,
+        unknowns,
+        hireabilityRead,
+        nextStep,
+        probe,
+        csvAnalysis
+      ];
+      const csv = csvFields.map(csvEscape).join(",");
+
+      document.getElementById("scoreNum").textContent = total;
+      document.getElementById("scoreTitle").textContent = recommendation;
+      document.getElementById("scoreNote").textContent = note;
+      document.getElementById("summary").textContent = summary;
+      document.getElementById("csv").textContent = csv;
+      lastResult = { summary, csv };
+      saveLogEntry({
+        createdAt: new Date().toISOString(),
+        name, title, company, location, profileUrl, companyTier, teamLane,
+        score: total,
+        recommendation,
+        verdict,
+        archetype,
+        breakdown: rows.map(r => `${r.label}:${r.points}/${r.weight}`).join(" | "),
+        flags: flags.map(f => f.text).join(" | "),
+        evidence,
+        builtAnalysis,
+        falsePositiveRisk,
+        unknowns,
+        hireabilityRead,
+        nextStep,
+        probe,
+        csvAnalysis,
+        summary
+      });
+
+      if (document.getElementById("autoClear").checked) {
+        setTimeout(() => clearInputsOnly(), 250);
+      }
+    }
+
+    function renderBreakdown(rows) {
+      document.getElementById("breakdown").innerHTML = rows.map(r => `
+        <tr>
+          <td>${r.label}</td>
+          <td><strong>${r.points}/${r.weight}</strong></td>
+          <td>${r.hits.length ? r.hits.map(h => `<span class="pill good">${h}</span>`).join("") : '<span class="pill warn">needs evidence</span>'}</td>
+        </tr>
+      `).join("");
+    }
+
+    function renderFlags(flags) {
+      document.getElementById("flags").innerHTML = flags.map(f => `<span class="pill ${f.type}">${f.text}</span>`).join("");
+    }
+
+    function renderLinks(name, company, title, teamLane) {
+      const team = teamLane || "";
+      const profileUrl = val("profileUrl");
+      const q1 = profileUrl || `site:linkedin.com/in "${name}" "${company}"`;
+      const q2 = `site:linkedin.com/in ("${company}") ("${title || "Senior Software Engineer"}" OR "Full Stack Engineer" OR "Product Engineer") ("${team}" OR API OR backend OR platform OR product)`;
+      const q3 = `"${name}" "${company}" software engineer`;
+      const links = [
+        ["Open / verify profile", profileUrl || `https://www.google.com/search?q=${encodeURIComponent(q1)}`],
+        ["Google X-ray candidate", `https://www.google.com/search?q=${encodeURIComponent(`site:linkedin.com/in "${name}" "${company}"`)}`],
+        ["Google X-ray similar profiles", `https://www.google.com/search?q=${encodeURIComponent(q2)}`],
+        ["General web verification", `https://www.google.com/search?q=${encodeURIComponent(q3)}`]
+      ];
+      document.getElementById("links").innerHTML = links.map(([label, href]) => `<a href="${href}" target="_blank" rel="noreferrer">${label}</a>`).join("");
+    }
+
+    function inferArchetype(teamLane, text) {
+      if (teamLane) return teamLane;
+      if (/fraud engineering|fraud detection|risk scoring|payment risk|payments risk|financial crime|freeze assets|fraudulent merchants|stripe fraud|censys|exposure management|vulnerability management/.test(text)) return "Fraud / Risk / Security Product Engineer";
+      if (/identity|auth|oauth|iam|sdk|control plane|permissions|access control|developer platform|api platform/.test(text)) return "Identity / API Platform Engineer";
+      if (/full product lifecycle|owned .*public|designed .*rest api|grpc gateway|credits\/billing|credits and billing|postgres datastore|low-latency .*connectors|market connectors|reconciliation engine/.test(text)) return "Backend Product Systems Owner";
+      if (/billing|metering|usage|invoice|pricing|monetization/.test(text)) return "Billing / Metering / Usage Platform Engineer";
+      if (/security|compliance|trust|risk|vulnerability|supply chain/.test(text)) return "Security / Compliance Workflow Engineer";
+      if (/search|retrieval|knowledge|connector|indexing|data platform/.test(text)) return "Data / Search / Knowledge Systems Engineer";
+      if (/api|developer platform|sdk|devx/.test(text)) return "API / Developer Platform Builder";
+      if (/internal tools|workflow|admin|enterprise|integrations/.test(text)) return "Enterprise Workflow / Internal Tools Builder";
+      if (/reliability|observability|performance|latency|compute/.test(text)) return "Reliability-minded Product Engineer";
+      if (/react|frontend|full stack|full-stack|product/.test(text)) return "Full-Stack Product Systems Owner";
+      return "General senior product engineer archetype";
+    }
+
+    function inferFalsePositiveRisk(text, hasTechnicalSignal, hasStrongPrior) {
+      const apiBuilderEvidence = /public api|api product|developer platform|api platform|designed .*api|owned .*api|built .*api|owned .*sdk|authored .*sdk|sdk ownership|grpc gateway|rest api surface|oauth api|external developer|customer-facing api/.test(text);
+      const fraudRiskSecurityProduct = /fraud engineering|fraud detection|risk scoring|payment risk|payments risk|financial crime|freeze assets|fraudulent merchants|stripe fraud|censys|exposure management|vulnerability management|security api|security product/.test(text);
+      if (/gtm|growth|content|community|investor|investing fellowship|venture fellow|marketing|business development/.test(text) && !/software engineer|backend engineer|full stack engineer|full-stack engineer|staff engineer|senior software engineer/.test(text)) {
+        return "Non-engineering / GTM pattern; do not advance unless sustained SWE work is separately visible.";
+      }
+      if (/lead front end developer|lead frontend developer|front end developer|frontend developer|front-end developer|ui developer|react specialist|frontend engineer|front-end engineer/.test(text) && !/backend|api|service|database|postgres|platform|full-stack|full stack/.test(text)) {
+        return "Frontend-primary profile; cap as no/def no for this TRM API/backend search unless backend ownership is explicit.";
+      }
+      if (/used .*api|using .*api|integrated .*api|stripe api|called .*api|consumed .*api/.test(text) && !apiBuilderEvidence) {
+        return "Possible API consumer rather than API builder; validate they designed/owned the API surface, not only integrated it.";
+      }
+      if (/change data capture|data replication|etl|warehouse|analytics engineer/.test(text) && !/product|customer-facing|workflow/.test(text) && !apiBuilderEvidence) {
+        return "Data pipeline / replication profile; validate product/API ownership before advancing.";
+      }
+      if (/forward deployed|fde|inference|model serving|ml platform|machine learning infrastructure|kubernetes|kafka|airflow|feature store|triton|nvidia|baseten|voice ai/.test(text) && !apiBuilderEvidence && !fraudRiskSecurityProduct) {
+        return "ML infra / Forward Deployed AI profile; validate product API/full-stack ownership before advancing.";
+      }
+      if (/client|customer request|implementation|implemented|feature request|fedramp|qualtrics/.test(text) && !apiBuilderEvidence) {
+        return "Client-feature / compliance implementation signal; validate API product ownership before advancing.";
+      }
+      if (/frontend|front-end|react|ui|ux/.test(text) && !/api|backend|service|database|postgres|platform/.test(text)) {
+        return "Frontend-heavy full-stack profile; validate backend/API ownership.";
+      }
+      if (/infrastructure|sre|devops|kubernetes/.test(text) && !/product|customer|workflow|api/.test(text)) {
+        return "Infra-adjacent profile; validate they built product systems, not only underlying infra.";
+      }
+      if (fraudRiskSecurityProduct || apiBuilderEvidence) {
+        return "Positive archetype evidence is visible; still validate depth, but this is not a known false-positive pattern.";
+      }
+      if (!hasTechnicalSignal && hasStrongPrior) {
+        return "Opaque LinkedIn profile from promising company/team; validate with probe, do not over-penalize.";
+      }
+      return "No obvious false-positive pattern from pasted evidence.";
+    }
+
+    function inferBuiltAnalysis(rows, evidence, hasTechnicalSignal, hasStrongPrior, teamLane) {
+      if (hasTechnicalSignal && evidence) {
+        return `Visible profile evidence points to ${teamLane || "product/API/platform"} relevance: ${evidence}.`;
+      }
+      if (hasStrongPrior) {
+        return `The company/team archetype is promising, but the pasted profile is thin. Treat as a sourcing lead and validate whether they actually owned backend/API/product systems.`;
+      }
+      return "The pasted profile does not yet show enough evidence of TRM-relevant product/API/backend ownership.";
+    }
+
+    function inferHireability(companyTier, text, total) {
+      const mission = /security|compliance|risk|fraud|gov|public sector|investigation|trust|safety/.test(text);
+      const remote = /remote|distributed|united states/.test(text);
+      const startup = /startup|series|ramp|vanta|linear|hex|metronome|langchain|baseten|modal|chainguard/.test(text);
+      const bits = [];
+      if (mission) bits.push("mission adjacency");
+      if (startup || companyTier !== "unknown") bits.push("startup/talent-dense environment");
+      if (remote) bits.push("remote/US setup may align");
+      if (total >= 70) bits.push("strong enough fit to justify outreach");
+      return bits.length ? bits.join("; ") : "unknown; validate motivation in outreach.";
+    }
+
+    function makeProbe(name, company, teamLane, archetype) {
+      const first = (name || "there").split(" ")[0];
+      const lane = teamLane || archetype || "product/API platform";
+      return `Hi ${first}, your work at ${company || "your current team"} caught my eye, especially the ${lane} angle. I am curious whether you have owned backend/API systems or customer-facing workflow products end to end. That is the core of what TRM is hiring for.`;
+    }
+
+    async function copySummary() {
+      if (!lastResult) scoreProfile();
+      await navigator.clipboard.writeText(document.getElementById("summary").textContent);
+    }
+
+    async function copyCsv() {
+      if (!lastResult) scoreProfile();
+      await navigator.clipboard.writeText(document.getElementById("csv").textContent);
+    }
+
+    function getLog() {
+      try { return JSON.parse(localStorage.getItem(LOG_KEY) || "[]"); }
+      catch { return []; }
+    }
+
+    function setLog(log) {
+      localStorage.setItem(LOG_KEY, JSON.stringify(log));
+      renderLog();
+    }
+
+    function saveLogEntry(entry) {
+      const log = getLog();
+      log.push(entry);
+      setLog(log);
+    }
+
+    function renderLog() {
+      const log = getLog();
+      const body = document.getElementById("logRows");
+      if (!body) return;
+      if (!log.length) {
+        body.innerHTML = '<tr><td colspan="9" class="muted">No scored candidates yet.</td></tr>';
+        return;
+      }
+      body.innerHTML = log.map((r, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${r.score}</strong></td>
+          <td>${r.verdict || r.recommendation || ""}</td>
+          <td>${r.profileUrl ? `<a href="${r.profileUrl}" target="_blank" rel="noreferrer">${r.name || ""}</a>` : (r.name || "")}</td>
+          <td>${r.title || ""}</td>
+          <td>${r.company || ""}</td>
+          <td>${r.location || ""}</td>
+          <td>${r.teamLane || ""}</td>
+          <td>${r.flags || ""}</td>
+          <td><button class="secondary" onclick="showLogAnalysis(${i})">View</button></td>
+        </tr>
+      `).join("");
+    }
+
+    function showLogAnalysis(index) {
+      const r = getLog()[index];
+      if (!r) return;
+      const text = `${r.name || "[Name]"} — ${r.title || "[Title]"} at ${r.company || "[Company]"}
+
+Verdict: ${r.verdict || r.recommendation || "not available"} (${r.score || "--"}/100)
+Archetype: ${r.archetype || "not logged in older row"}
+
+Analysis:
+${r.builtAnalysis || r.csvAnalysis || r.evidence || "Older row: detailed analysis was not logged. Re-score this candidate to generate the new analysis fields."}
+
+False-positive risk:
+${r.falsePositiveRisk || "Not logged in older row"}
+
+Unknowns:
+${r.unknowns || r.flags || "Not logged in older row"}
+
+Hireability:
+${r.hireabilityRead || "Not logged in older row"}
+
+Next step:
+${r.nextStep || "Not logged in older row"}
+
+Probe / outreach hook:
+${r.probe || "Not logged in older row"}
+
+Full summary:
+${r.summary || "Not logged in older row"}`;
+      document.getElementById("selectedAnalysis").textContent = text;
+    }
+
+    function logToCsv() {
+      const header = ["createdAt","name","title","company","location","profileUrl","companyTier","teamLane","score","verdict","recommendation","archetype","breakdown","flags","evidence","builtAnalysis","falsePositiveRisk","unknowns","hireabilityRead","nextStep","probe","csvAnalysis","summary"];
+      const rows = getLog().map(r => header.map(h => csvEscape(r[h] || "")).join(","));
+      return [header.join(","), ...rows].join("\n");
+    }
+
+    async function downloadLog() {
+      const csv = logToCsv();
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `trm-candidate-review-log-${new Date().toISOString().slice(0,10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function clearLog() {
+      if (confirm("Clear all locally saved scored candidates?")) {
+        setLog([]);
+      }
+    }
+
+    function removeLastLogEntry() {
+      const log = getLog();
+      log.pop();
+      setLog(log);
+    }
+
+    function clearForm(options = {}) {
+      ["name", "company", "title", "location", "profileUrl", "profile"].forEach(id => document.getElementById(id).value = "");
+      document.getElementById("companyTier").value = "unknown";
+      document.getElementById("teamLane").value = "";
+      document.getElementById("scoreNum").textContent = "--";
+      document.getElementById("scoreTitle").textContent = "Not scored";
+      document.getElementById("scoreNote").textContent = "Paste a profile and score it.";
+      document.getElementById("breakdown").innerHTML = "";
+      document.getElementById("flags").innerHTML = '<span class="pill warn">Waiting for profile</span>';
+      document.getElementById("links").innerHTML = "";
+      document.getElementById("summary").textContent = "Score a profile to generate a concise candidate note.";
+      document.getElementById("csv").textContent = "Score a profile to generate a CSV row.";
+      lastResult = null;
+    }
+
+    function clearInputsOnly() {
+      ["name", "company", "title", "location", "profileUrl", "profile"].forEach(id => document.getElementById(id).value = "");
+      document.getElementById("companyTier").value = "unknown";
+      document.getElementById("teamLane").value = "";
+    }
+
+    renderLog();
+  </script>
+</body>
+</html>

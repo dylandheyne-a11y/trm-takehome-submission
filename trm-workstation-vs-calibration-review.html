@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>TRM Workstation vs. Calibration Review</title>
+<style>
+:root{--ink:#2f3437;--muted:#5f666b;--line:#e8e6e3;--soft:#f7f6f3;--blue:#337ea9;--bluebg:#e7f3ff}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1050px;margin:0 auto;padding:44px 24px 80px}a{color:#2b6cb0;text-decoration:underline;text-underline-offset:2px}h1{font-size:44px;line-height:1.05;margin:0 0 18px}h2{font-size:28px;margin:28px 0 12px;background:var(--bluebg);border-radius:6px;padding:4px 9px}h3{font-size:22px;margin:24px 0 8px}p,li{color:var(--muted)}code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 4px;color:var(--ink)}pre{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:14px;overflow:auto}.table-wrap{overflow:auto;border:1px solid var(--line);margin:16px 0}table{width:100%;border-collapse:collapse;min-width:720px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:var(--soft);text-transform:uppercase;font-size:13px}.back{display:inline-block;margin-bottom:22px;font-size:14px}.note{border-left:4px solid var(--blue);background:#f3f8fc;padding:12px 14px;border-radius:0 6px 6px 0;margin:16px 0;color:#26384f}</style></head>
+<body><main class="wrap"><a class="back" href="trm-final-submission-draft.html">← Back to final submission</a><h1>TRM Workstation vs. Calibration Review</h1><div class="note">Supporting artifact for the TRM take-home submission. This page is intentionally browser-native so it can be shared from GitHub Pages.</div><h2>TRM Workstation vs. Calibration Review</h2>
+<p>Source CSV: <code>/Users/dylanheyne/Downloads/trm-candidate-review-log-2026-05-20.csv</code></p>
+<p>Review date: May 20, 2026</p>
+<h3>What The CSV Showed</h3>
+<p>The workstation was useful for logging, but too generous on keyword scoring.</p>
+<p>Main issues:</p>
+<ol>
+<li><strong>Default company source was too favorable.</strong></li>
+</ol>
+<p>   - The tool defaulted to <code>Primary company target</code>, so unknown or mis-parsed companies received a startup/company prior they did not earn.</p>
+<ol>
+<li><strong>Parser grabbed noisy LinkedIn text as company/title.</strong></li>
+</ol>
+<p>   - Example: Christopher Wirick logged as <code>Distinguished Software Engineer at HubSpot</code> at <code>Unity</code>, which did not match the actual review context.</p>
+<p>   - Example: David Oy company parsed as a sentence fragment from profile text.</p>
+<ol>
+<li><strong>Keyword scoring over-rewarded general words.</strong></li>
+</ol>
+<p>   - <code>API</code>, <code>platform</code>, <code>product</code>, <code>service</code>, <code>built</code>, <code>designed</code> appeared in pasted profile text, but the tool did not distinguish whether the candidate owned product APIs or was adjacent to them.</p>
+<ol>
+<li><strong>AI infra / Forward Deployed profiles were misclassified.</strong></li>
+</ol>
+<p>   - Christopher Wirick, David Oy, Ian Carrasco, and Alex Ker were over-scored locally relative to Claude calibration.</p>
+<p>   - Baseten/FDE profiles looked technical but skewed ML infra, inference, performance, deployment, and GTM-adjacent work.</p>
+<h3>Candidate-Level Delta Examples</h3>
+<div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Workstation result</th><th>Calibrated result</th><th>Why workstation was off</th></tr></thead><tbody><tr><td>Andrew DiCarlo</td><td>97 / Strong review</td><td>~58 / No</td><td>Tool over-read <code>built</code>, <code>API</code>, <code>backend</code>, <code>platform</code>; Claude identified client-feature work, not API product ownership.</td></tr><tr><td>Christopher Wirick</td><td>87 / Strong Yes</td><td>~44 / No</td><td>Parser/title/company wrong; ML/data infra profile was treated as identity/API product fit.</td></tr><tr><td>David Oy</td><td>95 / Strong Yes</td><td>~61 / Soft Flag</td><td>Strong ML systems profile, but inference/FDE archetype, not full-stack product/API owner.</td></tr><tr><td>Alex Ker</td><td>100 / Strong Yes</td><td>DQ / No</td><td>Tool over-read keywords; calibrated review found no sustained software engineering career.</td></tr></tbody></table></div>
+<h3>Calibration Update Applied</h3>
+<p>Tool changes:</p>
+<ul>
+<li>Default company source is now <code>Unknown / needs research</code>.</li>
+<li>Baseten is now <code>Deprioritized for this search</code>.</li>
+<li>ML infra/FDE/inference patterns now trigger a caution flag.</li>
+<li>ML infra/FDE profiles cannot become clean <code>Yes</code> unless product/API ownership is explicit.</li>
+<li>Baseten/FDE false-positive pattern added to calibration log.</li>
+</ul>
+<h3>May 21 Calibration Update Applied</h3>
+<p>Source: <code>/Users/dylanheyne/Downloads/TRM_CODEX_CALIBRATION_2026-05-21.md</code></p>
+<p>Additional tool changes:</p>
+<ul>
+<li>Company/startup signal was reduced to a 10-point prior. It can get a profile into review, but should not carry the verdict.</li>
+<li>Frontend-primary identity now gets a heavy penalty and a <code>Def No</code> cap for this TRM API/backend search.</li>
+<li>GTM/content/investing patterns now get a <code>Def No</code> cap unless sustained SWE work is visible.</li>
+<li>API consumer language now gets penalized and capped unless there is explicit API builder evidence.</li>
+<li>Fraud/risk/security product engineering is now treated as a positive TRM archetype, not ML infra.</li>
+<li>Practitioner evidence such as REST API surface design, SDK ownership, gRPC gateway, credits/billing services, Postgres datastore, fraud/risk work, full product lifecycle, reconciliation engines, and low-latency market connectors now receives a boost.</li>
+<li>Logged CSV rows now include richer analysis fields: archetype, built-analysis, false-positive risk, unknowns, hireability read, next step, probe, and full summary.</li>
+</ul>
+<p>Working rule:</p>
+<p>&gt; Company is a sourcing prior. Functional archetype is the gate. Evidence is the verdict.</p>
+<h3>Working Rule Going Forward</h3>
+<p>Do not let keyword hits outrun role archetype.</p>
+<p>For TRM:</p>
+<p>&gt; API/backend/platform keywords matter only when they support product ownership, not when they appear in ML infra, customer deployment, or implementation-adjacent contexts.</p>
+<h3>Next Tool Improvement</h3>
+<p>If we keep iterating, add a manual override field:</p>
+<pre><code>Human verdict:
+Human calibration notes:</code></pre>
+<p>This would let Dylan record Claude/HM feedback directly against a logged row without relying only on automatic scoring.</p></main></body></html>

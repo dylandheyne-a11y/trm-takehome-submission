@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TRM Company Guide — Paraform Talent Density Model</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --ink: #171a21;
+      --muted: #5f6673;
+      --line: #dfe3ea;
+      --panel: #ffffff;
+      --soft: #eef3f8;
+      --blue: #2457d6;
+      --teal: #047d75;
+      --amber: #9a5b00;
+      --rose: #b42318;
+      --green: #116b3a;
+      --shadow: 0 18px 60px rgba(20, 31, 49, .08);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    .shell { display: grid; grid-template-columns: 286px minmax(0, 1fr); min-height: 100vh; }
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 28px 18px;
+      border-right: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(14px);
+    }
+    .brand { padding: 0 10px 20px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+    .eyebrow { font-size: 12px; font-weight: 780; color: var(--blue); letter-spacing: .08em; text-transform: uppercase; }
+    .brand h1 { font-size: 20px; line-height: 1.15; margin: 8px 0; letter-spacing: 0; }
+    .brand p { color: var(--muted); font-size: 13px; margin: 0; }
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    nav a:hover { color: var(--ink); background: var(--soft); }
+    nav .num {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: #e6ebf3;
+      color: #344054;
+      font-size: 12px;
+      font-weight: 780;
+      flex: 0 0 auto;
+    }
+    main { padding: 46px 52px 80px; max-width: 1220px; }
+    .hero {
+      padding: 42px;
+      background: linear-gradient(135deg, #ffffff 0%, #eef4ff 55%, #eef9f5 100%);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+    .hero h2 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: .98;
+      letter-spacing: 0;
+      margin: 12px 0 16px;
+      max-width: 890px;
+    }
+    .hero p { margin: 0; max-width: 820px; color: #344054; font-size: 18px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.8);
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 650;
+    }
+    section {
+      margin-top: 28px;
+      padding: 28px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 10px 36px rgba(20, 31, 49, .05);
+      scroll-margin-top: 24px;
+    }
+    .section-head { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 18px; }
+    .badge {
+      display: inline-grid;
+      place-items: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 8px;
+      border-radius: 9px;
+      background: #e8eefc;
+      color: var(--blue);
+      font-weight: 850;
+      font-size: 13px;
+    }
+    h3 { margin: 0; font-size: 25px; line-height: 1.15; letter-spacing: 0; }
+    h4 { margin: 24px 0 8px; font-size: 16px; letter-spacing: 0; }
+    p { color: var(--muted); }
+    .lead { font-size: 17px; color: #344054; margin-top: 0; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card { border: 1px solid var(--line); border-radius: 12px; padding: 18px; background: #fbfcfe; }
+    .card h4 { margin-top: 0; }
+    .card p:last-child { margin-bottom: 0; }
+    .tag {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 760;
+      margin-bottom: 10px;
+      background: #e8eefc;
+      color: var(--blue);
+    }
+    .tag.teal { background: #e4f4f1; color: var(--teal); }
+    .tag.amber { background: #fff2d8; color: var(--amber); }
+    .tag.rose { background: #ffe9e7; color: var(--rose); }
+    .tag.green { background: #e8f5ee; color: var(--green); }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 2px; font-size: 14px; }
+    th {
+      text-align: left;
+      color: #344054;
+      background: #f2f5f9;
+      border-bottom: 1px solid var(--line);
+      padding: 11px 12px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    td { border-bottom: 1px solid var(--line); padding: 12px; vertical-align: top; color: #3b4350; }
+    tr:last-child td { border-bottom: none; }
+    .quote {
+      border-left: 4px solid var(--blue);
+      background: #f3f6ff;
+      padding: 16px 18px;
+      border-radius: 0 12px 12px 0;
+      color: #25304b;
+      font-size: 17px;
+      margin: 18px 0;
+    }
+    .callout {
+      border: 1px solid #c9d7ff;
+      background: #f5f8ff;
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      color: #25304b;
+    }
+    ul, ol { color: #3b4350; padding-left: 22px; }
+    li { margin: 7px 0; }
+    pre {
+      background: #121826;
+      color: #dbe4f0;
+      padding: 17px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    code { font-family: "SF Mono", Consolas, ui-monospace, monospace; }
+    .footer { color: var(--muted); font-size: 13px; margin: 24px 4px 0; }
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      aside { position: relative; height: auto; }
+      main { padding: 24px 18px 48px; }
+      .hero { padding: 28px; }
+      .grid, .grid.two { grid-template-columns: 1fr; }
+      table { display: block; overflow-x: auto; white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <div class="brand">
+        <div class="eyebrow">TRM Labs</div>
+        <h1>Company Guide</h1>
+        <p>Using Paraform's Talent Density Index as the high-growth model.</p>
+      </div>
+      <nav>
+        <a href="#model"><span class="num">1</span>Model</a>
+        <a href="#definition"><span class="num">2</span>Definition</a>
+        <a href="#scorecard"><span class="num">3</span>Scorecard</a>
+        <a href="#tier1"><span class="num">4</span>Primary</a>
+        <a href="#tier2"><span class="num">5</span>Team-Targeted</a>
+        <a href="#team-taxonomy"><span class="num">6</span>Team Taxonomy</a>
+        <a href="#expansion"><span class="num">7</span>Expansion</a>
+        <a href="#counter"><span class="num">8</span>Counter Data</a>
+        <a href="#linkedin"><span class="num">9</span>LinkedIn</a>
+        <a href="#notion"><span class="num">10</span>Notion Copy</a>
+      </nav>
+    </aside>
+
+    <main>
+      <header class="hero">
+        <div class="eyebrow">Execution Asset · May 19, 2026</div>
+        <h2>Define high-growth through talent density, not startup vibes.</h2>
+        <p>Paraform gives us an external model for the assignment: strong companies are not just well-funded or famous. They attract exceptional people, retain technical density, and produce talent the market wants to hire.</p>
+        <div class="chips">
+          <span class="chip">Paraform Talent Density Index</span>
+          <span class="chip">TRM full-stack product engineering</span>
+          <span class="chip">US-based sourcing</span>
+          <span class="chip">LinkedIn validation required</span>
+        </div>
+      </header>
+
+      <section id="model">
+        <div class="section-head">
+          <span class="badge">M</span>
+          <div>
+            <h3>The External Model</h3>
+            <p class="lead">Paraform's index gives us the right frame: talent density is market demand for a company's people, not just capital raised or headcount growth.</p>
+          </div>
+        </div>
+        <div class="quote">For this take-home, I am treating high-growth startup experience as a proxy for talent-dense operating environments: selective hiring, high technical concentration, strong market demand for employees, and proof that great people choose to work there.</div>
+        <div class="grid">
+          <div class="card">
+            <span class="tag">Signal 1</span>
+            <h4>Market demand</h4>
+            <p>Are current and former employees from the company sought after by other top teams?</p>
+          </div>
+          <div class="card">
+            <span class="tag teal">Signal 2</span>
+            <h4>Talent attraction</h4>
+            <p>Does the company consistently attract top-tier hires from strong technical environments?</p>
+          </div>
+          <div class="card">
+            <span class="tag amber">Signal 3</span>
+            <h4>Technical concentration</h4>
+            <p>Does the company maintain technical depth instead of diluting the bar as it scales?</p>
+          </div>
+        </div>
+        <div class="callout"><strong>Source basis:</strong> Paraform describes its index as combining talent demand, hiring outcomes, technical depth, hiring trajectory, prior employer quality, domain concentration, recruiter observations, and recency/completeness guardrails.</div>
+      </section>
+
+      <section id="definition">
+        <div class="section-head">
+          <span class="badge">D</span>
+          <div>
+            <h3>TRM-Specific Definition</h3>
+            <p class="lead">This is the Step 1 answer direction.</p>
+          </div>
+        </div>
+        <div class="quote">A high-growth, fast-paced startup is a talent-dense company where selective hiring, technical concentration, market demand for employees, and rapid operating cadence combine. I would prioritize companies whose engineers are repeatedly recruited by other top teams, whose products require high-ownership product/API/system work, and whose environment rewards speed, ambiguity navigation, and end-to-end accountability.</div>
+        <h4>Why this matters for TRM</h4>
+        <ul>
+          <li>TRM's role requires engineers who can anchor projects, build APIs, translate stakeholder needs, and operate with changing priorities.</li>
+          <li>Funding alone is not enough. The stronger proxy is whether the company concentrates people who can ship in ambiguous, high-accountability settings.</li>
+          <li>The Paraform model helps justify why target companies should be chosen by talent quality and market demand, not only brand awareness.</li>
+        </ul>
+      </section>
+
+      <section id="scorecard">
+        <div class="section-head">
+          <span class="badge">S</span>
+          <div>
+            <h3>Company Scoring Guide</h3>
+            <p class="lead">Use this to decide whether a company belongs in the TRM target list.</p>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Dimension</th><th>Weight</th><th>What strong looks like</th></tr></thead>
+          <tbody>
+            <tr><td>Talent density</td><td>5</td><td>Company appears on Paraform index or has similar evidence of selective hiring and market demand for employees.</td></tr>
+            <tr><td>TRM role relevance</td><td>5</td><td>API/platform/backend/product systems, internal tools, customer workflows, data/security/risk, or infrastructure-heavy product engineering.</td></tr>
+            <tr><td>Startup operating pace</td><td>4</td><td>Venture-backed, scaling quickly, high ownership, compressed timelines, meaningful ambiguity.</td></tr>
+            <tr><td>US sourcing fit</td><td>4</td><td>US HQ or strong US engineering presence; candidate location can be validated in LinkedIn.</td></tr>
+            <tr><td>Non-competitor status</td><td>Required</td><td>Avoid direct blockchain intelligence / crypto investigation competitors.</td></tr>
+            <tr><td>Candidate evidence availability</td><td>3</td><td>LinkedIn profiles show tenure, role scope, startup experience, and technical/product ownership.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="tier1">
+        <div class="section-head">
+          <span class="badge">1</span>
+          <div>
+            <h3>Primary Company Targets</h3>
+            <p class="lead">Start here because the company-level signal is strong and broad enough to search directly, then still validate candidate/team fit.</p>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Company</th><th>Paraform rank</th><th>Why target</th><th>Best profile signal</th></tr></thead>
+          <tbody>
+            <tr><td>Ramp</td><td>12</td><td>Fintech workflow, risk/finance operations, strong product engineering pace.</td><td>Senior full-stack/product engineers with API, internal platform, or financial workflow ownership.</td></tr>
+            <tr><td>Vanta</td><td>30</td><td>Security/compliance workflow adjacency; high customer trust and operational rigor.</td><td>Engineers who built compliance automation, integrations, data workflows, or customer-facing platforms.</td></tr>
+            <tr><td>Merge</td><td>45</td><td>Production API infrastructure and integrations; direct overlap with TRM API/product systems.</td><td>Engineers owning integrations, developer experience, API reliability, or customer-facing platform work.</td></tr>
+            <tr><td>Linear</td><td>25</td><td>High product craft, engineering taste, fast product operating cadence.</td><td>Product engineers with full-stack ownership and customer empathy.</td></tr>
+            <tr><td>Modal Labs</td><td>6</td><td>Serverless AI infrastructure; high technical density and platform work.</td><td>Backend/platform engineers with distributed systems, infra, or API product experience.</td></tr>
+            <tr><td>LangChain</td><td>11</td><td>AI developer platform; API/framework/product engineering in ambiguous market.</td><td>Engineers with framework, SDK, developer platform, or full-stack AI product experience.</td></tr>
+            <tr><td>Pinecone</td><td>43</td><td>Vector database infrastructure; API, storage, and data system relevance.</td><td>Backend/API engineers with database, search, or scalable system experience.</td></tr>
+            <tr><td>Vannevar Labs</td><td>36</td><td>Defense/national security mission adjacency with TRM.</td><td>Engineers building mission-critical workflows for public-sector or analyst users.</td></tr>
+            <tr><td>Applied Intuition</td><td>5</td><td>High R&D concentration, hard technical domain, mission/physical-world complexity.</td><td>Engineers with platform, simulation, data, or customer-facing technical product ownership.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="tier2">
+        <div class="section-head">
+          <span class="badge">2</span>
+          <div>
+            <h3>Team-Targeted Companies</h3>
+            <p class="lead">Use these when the candidate's team, product area, or shipped work maps directly to TRM. Broad companies are not weaker by default; they require more precise team/function targeting.</p>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Company</th><th>Paraform rank</th><th>Target teams / terminology</th><th>Use when</th></tr></thead>
+          <tbody>
+            <tr><td>OpenAI</td><td>2</td><td>API Platform, API Experience, B2B Applications, ChatGPT Engineering, Monetization Product & Platform, Internal Applications, Frontier Exploration.</td><td>Candidate has product engineering, internal tools, API, customer-facing systems, or platform/product bridge work.</td></tr>
+            <tr><td>Anthropic</td><td>3</td><td>Claude Developer Platform, Product Foundations, Product Platform, Accounts Platform, UI Platform, Product Dev Product, Beneficial Deployments, Applied AI.</td><td>Candidate shows API/developer platform, product systems, identity/access, reliability, customer workflow, or mission-driven product engineering relevance.</td></tr>
+            <tr><td>Cursor / Warp / Cognition / Factory AI</td><td>4 / 18 / 15 / 34</td><td>Developer platform, product engineering, editor/workbench, internal tools, agent workflow, enterprise/admin, evaluation or deployment surfaces.</td><td>Candidate has production product engineering, API/platform ownership, or customer-facing systems, not only demos or research prototypes.</td></tr>
+            <tr><td>Glean</td><td>10</td><td>Enterprise search, permissions, identity, knowledge graph, connectors, admin workflows, data platform, customer-facing product engineering.</td><td>Candidate built enterprise workflow, search, permissions, integrations, or data product systems.</td></tr>
+            <tr><td>Decagon / Harvey</td><td>7 / 16</td><td>Enterprise workflow, integrations, admin surfaces, evaluation, customer deployment, data/security-sensitive product systems.</td><td>Candidate has product engineering across frontend/backend/customer integrations and can explain tradeoffs in high-stakes user workflows.</td></tr>
+            <tr><td>Together AI / Fireworks AI</td><td>13 / 14</td><td>API platform, developer experience, usage/billing, model serving, observability, reliability, customer-facing platform surfaces.</td><td>Candidate can bridge platform/API infrastructure with product-facing workflows and customer needs.</td></tr>
+            <tr><td>Metronome</td><td>32</td><td>Usage events, billable metrics, rate cards, contracts, commits/credits, invoices, notifications, SDKs, customer-facing billing APIs.</td><td>Candidate has billing/metering/API ownership. Negative company growth in the pull affects volume, not role relevance.</td></tr>
+            <tr><td>Hex</td><td>44</td><td>Backend Product, Backend Platform, Fullstack, Compute, Foundations, Growth/Monetization, AI Agent, Agent Context, Search and Context, Admin Experience.</td><td>Candidate has data/product workflow, AI agent governance, compute/platform, or full-stack customer workflow ownership. Negative company growth affects pool size, not candidate quality.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>Sourcing stance:</strong> Do not eliminate a company because the average profile may skew research, infra, or platform. Search the right teams. For TRM, the strongest terms are API platform, product platform, internal tools, developer experience, customer workflows, identity/access, billing/metering, integrations, data workflows, trust/safety, security/compliance, and reliability.</div>
+      </section>
+
+      <section id="team-taxonomy">
+        <div class="section-head">
+          <span class="badge">T</span>
+          <div>
+            <h3>Ideal Team / Function Taxonomy</h3>
+            <p class="lead">Feed this into the resume review or sourcing agent. It targets the teams most likely to produce TRM-fit candidates, not just company names.</p>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Team archetype</th><th>LinkedIn / resume terms</th><th>Best-fit companies</th><th>Why TRM cares</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>API / Developer Platform</td>
+              <td>API Platform, Developer Platform, Developer Experience, DevX, SDK, Console, Workbench, API Experience, API Products, Platform Developer Experience</td>
+              <td>Anthropic, OpenAI, Glean, Merge, LangChain, Fireworks AI, Together AI, Metronome</td>
+              <td>TRM needs engineers who can design public/internal APIs with strong customer experience and reliability judgment.</td>
+            </tr>
+            <tr>
+              <td>Product Platform / Shared Capabilities</td>
+              <td>Product Platform, Product Foundations, Platform Product, Foundations, Shared Product Capabilities, UI Platform, Internal Platform</td>
+              <td>Anthropic, OpenAI, Hex, Vanta, Ramp, Linear</td>
+              <td>Maps to TRM's shared engineering services, internal customers, and reusable systems.</td>
+            </tr>
+            <tr>
+              <td>Identity / Access / Permissions</td>
+              <td>Identity, Auth, Authentication, Authorization, Access Control, Permissions, SSO, SCIM, OAuth, Key Management, Admin Experience</td>
+              <td>Anthropic, Glean, Vanta, Chainguard, Ramp, Hex</td>
+              <td>TRM products likely require secure workflows, sensitive data access, and enterprise-grade controls.</td>
+            </tr>
+            <tr>
+              <td>Billing / Usage / Metering</td>
+              <td>Billing, Usage-Based Billing, Metering, Rate Cards, Invoicing, Pricing Platform, Monetization, Contracts, Credits, Usage Events</td>
+              <td>Metronome, Ramp, OpenAI, Anthropic, Fireworks AI, Together AI, Render</td>
+              <td>Strong proxy for API-heavy systems, data correctness, customer workflows, and cross-functional product/finance complexity.</td>
+            </tr>
+            <tr>
+              <td>Enterprise Workflow / Admin Product</td>
+              <td>Admin Experience, Enterprise, B2B Applications, Customer Workflows, Internal Tools, Workflow Automation, Integrations, Customer Platform</td>
+              <td>Vanta, Glean, Hex, Ramp, Harvey, Decagon, OpenAI, Anthropic</td>
+              <td>TRM role requires translating stakeholder pain into product requirements and shipping usable systems.</td>
+            </tr>
+            <tr>
+              <td>Data / Search / Knowledge Systems</td>
+              <td>Search, Enterprise Search, Retrieval, Knowledge Graph, Connectors, Indexing, Data Platform, Data Apps, Analytics Workflows, System of Context</td>
+              <td>Glean, Hex, Pinecone, LangChain, Vannevar Labs</td>
+              <td>Relevant to investigative workflows, analyst productivity, data-heavy product surfaces, and AI-assisted search.</td>
+            </tr>
+            <tr>
+              <td>Security / Trust / Compliance Product</td>
+              <td>Trust, Security, Compliance, GRC, Risk, Supply Chain Security, Secure Software Delivery, SLSA, SBOM, Vulnerability Management, Product Security</td>
+              <td>Vanta, Chainguard, Drata, Cyera, Wiz, Panther, Semgrep</td>
+              <td>Mission-adjacent to TRM and a strong indicator of building for sensitive, high-trust customer environments.</td>
+            </tr>
+            <tr>
+              <td>Reliability / Observability / Production Systems</td>
+              <td>Reliability, Observability, Performance, Latency, Infrastructure Product, Compute, CI/CD, Developer Tooling, Production Platform</td>
+              <td>Hex, Anthropic, Modal Labs, Fireworks AI, Together AI, Chainguard</td>
+              <td>TRM needs scalable software with operational maturity, on-call readiness, and performance awareness.</td>
+            </tr>
+            <tr>
+              <td>Applied AI / Customer Deployment</td>
+              <td>Applied AI, Customer Engineering, Forward Deployed, Solutions Engineering, Enterprise Deployment, Evaluation, Agent Workflows, AI Platform</td>
+              <td>Anthropic, OpenAI, Glean, Harvey, Decagon, LangChain</td>
+              <td>Useful when the candidate is still a builder and has direct customer/product judgment, not only pre-sales support.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>Agent instruction:</strong> Prioritize candidates whose current or prior role matches at least one team archetype and at least one TRM technical surface: API/backend services, full-stack product workflows, data/search systems, security/compliance, internal tools, or customer-facing enterprise product.</div>
+        <h4>Two-company sizing example</h4>
+        <div class="callout"><strong>Important:</strong> LinkedIn Talent Insights gives company-level pool size, not exact team size. The numbers below are search-scope estimates: how many profiles I would expect to manually review after adding team/function keywords.</div>
+        <table>
+          <thead><tr><th>Company</th><th>Report pool</th><th>Ideal team lanes</th><th>Estimated reviewable slice</th><th>Search terms</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Vanta</td>
+              <td>176 professionals</td>
+              <td>Compliance automation, integrations, platform, security/trust workflows, enterprise admin.</td>
+              <td>~30-55 profiles to review after team/function filtering.</td>
+              <td>Compliance, GRC, integrations, platform, security, trust, admin, workflow, backend, API, product.</td>
+            </tr>
+            <tr>
+              <td>Ramp</td>
+              <td>175 professionals</td>
+              <td>Financial workflows, risk/fraud, platform, approvals, spend management, internal tools, customer-facing product systems.</td>
+              <td>~25-50 profiles to review after team/function filtering.</td>
+              <td>Risk, fraud, platform, approvals, spend, cards, payments, internal tools, API, backend, product.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>Simplified sourcing logic:</strong> Company guide tells us where to look. Team taxonomy tells us what to search inside those companies. Candidate scorecard decides who advances.</div>
+
+        <h4>Company + Boolean block map</h4>
+        <table>
+          <thead><tr><th>Company / cluster</th><th>Use these team blocks</th><th>Keyword Boolean</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Vanta</td>
+              <td>Security / Trust / Compliance; Enterprise Workflow; API / Developer Platform</td>
+              <td><code>(Compliance OR GRC OR Security OR Trust OR Risk OR Integrations OR "Admin Experience" OR "Customer Workflows" OR Platform OR API OR Backend)</code></td>
+            </tr>
+            <tr>
+              <td>Ramp</td>
+              <td>Enterprise Workflow; Billing / Usage / Metering; Security/Risk; Product Platform</td>
+              <td><code>(Risk OR Fraud OR Payments OR Cards OR Approvals OR Spend OR Billing OR Platform OR "Internal Tools" OR API OR Backend OR Product)</code></td>
+            </tr>
+            <tr>
+              <td>Metronome</td>
+              <td>Billing / Usage / Metering; API / Developer Platform</td>
+              <td><code>(Billing OR Metering OR "Usage-Based Billing" OR "Usage Events" OR "Rate Cards" OR Invoicing OR Monetization OR Contracts OR Credits OR SDK OR API)</code></td>
+            </tr>
+            <tr>
+              <td>Hex</td>
+              <td>Data / Search / Knowledge; Product Platform; Reliability / Compute; Applied AI</td>
+              <td><code>("Data Platform" OR "Analytics Workflows" OR Compute OR Foundations OR "Backend Platform" OR "Backend Product" OR Fullstack OR "AI Agent" OR "Agent Context" OR Search)</code></td>
+            </tr>
+            <tr>
+              <td>Glean</td>
+              <td>Data / Search / Knowledge; Identity / Permissions; Enterprise Workflow; Applied AI</td>
+              <td><code>("Enterprise Search" OR Search OR Retrieval OR "Knowledge Graph" OR Connectors OR Indexing OR Permissions OR "Access Control" OR "Work AI" OR Agents OR "System of Context")</code></td>
+            </tr>
+            <tr>
+              <td>Anthropic / OpenAI</td>
+              <td>API / Developer Platform; Product Platform; Identity / Access; Applied AI; Internal Tools</td>
+              <td><code>("API Platform" OR "Developer Platform" OR "API Experience" OR "Product Platform" OR "Product Foundations" OR "Internal Applications" OR "Internal Tools" OR Identity OR Permissions OR "Applied AI")</code></td>
+            </tr>
+            <tr>
+              <td>LangChain / Modal / Fireworks / Together AI</td>
+              <td>API / Developer Platform; Reliability / Production Systems; Applied AI; Product Platform</td>
+              <td><code>("Developer Platform" OR "Developer Experience" OR SDK OR API OR Platform OR Reliability OR Observability OR Compute OR Deployment OR Evaluation OR "AI Platform")</code></td>
+            </tr>
+            <tr>
+              <td>Chainguard / Drata / Cyera / Wiz / Semgrep / Panther</td>
+              <td>Security / Trust / Compliance; Identity / Access; Enterprise Workflow; Reliability</td>
+              <td><code>(Security OR Compliance OR Trust OR Risk OR "Supply Chain Security" OR "Product Security" OR Vulnerability OR Identity OR Permissions OR Platform OR Reliability)</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>How to use:</strong> Apply title filters first, then company filter, then one keyword Boolean block. If the result count is too narrow, remove the most specialized terms first. If it is too broad, add <code>(API OR Backend OR Platform OR Product)</code>.</div>
+        <div class="callout"><strong>Baseten calibration:</strong> after four reviewed profiles and zero advances, remove Baseten from active sourcing for this role. Reconsider only if a profile clearly shows product/API/full-stack ownership rather than ML inference, performance, or forward-deployed AI infrastructure.</div>
+      </section>
+
+      <section id="expansion">
+        <div class="section-head">
+          <span class="badge">E</span>
+          <div>
+            <h3>Expansion Pools</h3>
+            <p class="lead">Use these if the primary and team-targeted pools are too small or candidate availability is weak.</p>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <span class="tag green">Product SaaS</span>
+            <h4>Faire, Whatnot, Browser Company</h4>
+            <p>Good for product velocity and full-stack scope; validate backend/API depth carefully.</p>
+          </div>
+          <div class="card">
+            <span class="tag teal">Data / AI Workflow</span>
+            <h4>Chalk, Eventual, Brain Co.</h4>
+            <p>Good for data-heavy product systems; validate company maturity and US-based candidate fit.</p>
+          </div>
+          <div class="card">
+            <span class="tag amber">Mission / Hard Tech</span>
+            <h4>Nominal, Bedrock Robotics, Nuro</h4>
+            <p>Good for high-ownership engineering; validate full-stack product relevance.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="counter">
+        <div class="section-head">
+          <span class="badge">C</span>
+          <div>
+            <h3>Counter-Data Sources</h3>
+            <p class="lead">Use Paraform as the primary talent-density lens, then triangulate with rankings that measure different things.</p>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Source</th><th>Measures</th><th>Use for TRM</th><th>Watch-out</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><a href="https://www.linkedin.com/hubs/top-startups/">LinkedIn Top Startups</a></td>
+              <td>Employment growth, engagement, job interest, and ability to attract top talent.</td>
+              <td>Good counterweight for jobseeker demand and hiring momentum. Useful for US-based sourcing and LinkedIn execution.</td>
+              <td>Can over-index on brand heat and consumer/health/wellness companies that are less relevant to TRM engineering.</td>
+            </tr>
+            <tr>
+              <td><a href="https://rankings.statista.com/en/employers/rankings/best-startup-employers-america-2026/">Forbes / Statista Best Startup Employers</a></td>
+              <td>Employer reputation, employee satisfaction, and growth across U.S. startups.</td>
+              <td>Good quality-of-employer check. Helps avoid sourcing only from intense companies that may have weak retention or employee sentiment.</td>
+              <td>Employer brand is not the same as technical talent density or role relevance.</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.signalfire.com/blog/signalfire-state-of-talent-report-2025">SignalFire State of Tech Talent</a></td>
+              <td>Talent movement and startup talent trends from SignalFire's Beacon AI platform.</td>
+              <td>Useful macro context for where technical talent is moving, especially AI/startup career patterns.</td>
+              <td>Better for market narrative than a direct target-company list.</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.cbinsights.com/research/ai-100-2025-data/">CB Insights AI 100</a></td>
+              <td>Promising AI startups based on deal activity, partnerships, team/investor strength, headcount, and commercial maturity signals.</td>
+              <td>Useful for AI-native company expansion pools and spotting fast-moving infrastructure/product companies.</td>
+              <td>AI-specific and not necessarily full-stack/API/product relevant for TRM.</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.forbes.com/sites/forbes-spotlights/2025/04/10/forbes-announces-seventh-annual-ai-50-list-featuring-the-most-prominent-ai-startups-in-the-world/">Forbes AI 50</a></td>
+              <td>Prominent private AI startups selected by Forbes editors and partners.</td>
+              <td>Useful for validating AI-native companies already in the Paraform/LinkedIn overlap.</td>
+              <td>Editorial list; use as corroboration, not proof.</td>
+            </tr>
+            <tr>
+              <td><a href="https://www.ycombinator.com/companies">Y Combinator Directory</a></td>
+              <td>YC-backed company universe with filters by batch, industry, location, and stage.</td>
+              <td>Useful for early-stage expansion and finding emerging companies not yet captured by bigger rankings.</td>
+              <td>YC affiliation is not enough. Many companies are too early, too small, or not relevant to senior full-stack product engineering.</td>
+            </tr>
+            <tr>
+              <td><a href="https://about.crunchbase.com/blog/how-investors-find-growing-startups-with-crunchbase">Crunchbase</a> / <a href="https://dealroom.co/our-data/">Dealroom</a></td>
+              <td>Funding, headcount, stage, geography, web traffic, and growth signals.</td>
+              <td>Useful for confirming funding timing, growth stage, and whether a company is actually scaling.</td>
+              <td>Growth data can validate company momentum, but it does not prove talent quality.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Triangulation rule</h4>
+        <div class="callout"><strong>Use overlaps, not isolated rankings.</strong> A company becomes a stronger target when it appears in Paraform and at least one counter-source, then also passes the TRM relevance screen: US sourcing fit, non-competitor, API/platform/product engineering relevance, and evidence of high-ownership startup operating cadence.</div>
+
+        <h4>Observed cross-reference insights</h4>
+        <table>
+          <thead><tr><th>Company</th><th>Signals observed</th><th>TRM read</th><th>Sourcing decision</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Fireworks AI</td>
+              <td>Paraform #14; LinkedIn Top Startups #14.</td>
+              <td>Strong talent-density + job-market momentum overlap. AI infrastructure/API surface is relevant if candidate has product/platform scope.</td>
+              <td>Team-targeted / selective by profile.</td>
+            </tr>
+            <tr>
+              <td>Harvey</td>
+              <td>Paraform #16; LinkedIn Top Startups #17.</td>
+              <td>Strong enterprise AI talent signal; high customer-stakes workflows. Role fit depends on full-stack/product systems evidence.</td>
+              <td>Team-targeted unless candidate is clearly product/API-oriented.</td>
+            </tr>
+            <tr>
+              <td>Together AI</td>
+              <td>Paraform #13; LinkedIn Top Startups #25.</td>
+              <td>Strong AI infrastructure momentum. Good for backend/platform engineers who can bridge infra and customer-facing systems.</td>
+              <td>Team-targeted / infra-heavy expansion.</td>
+            </tr>
+            <tr>
+              <td>ElevenLabs</td>
+              <td>Paraform #33; LinkedIn Top Startups #16.</td>
+              <td>Talent-dense and high-growth, but product/domain relevance varies. Strong only where candidate has platform, API, enterprise, or workflow ownership.</td>
+              <td>Selective expansion.</td>
+            </tr>
+            <tr>
+              <td>Mercor</td>
+              <td>Paraform #26; LinkedIn Top Startups #7.</td>
+              <td>Clear AI/talent-market momentum. Useful as a signal for AI-native operating pace, but role relevance must be validated carefully.</td>
+              <td>Selective expansion.</td>
+            </tr>
+            <tr>
+              <td>Thinking Machines Lab</td>
+              <td>Paraform #1; LinkedIn Top Startups #9.</td>
+              <td>Extremely dense talent signal, but likely research-heavy and very early. Not an obvious TRM full-stack sourcing pool unless profile is product/platform engineering.</td>
+              <td>Do not prioritize unless candidate fit is unusually clear.</td>
+            </tr>
+            <tr>
+              <td>Chainguard</td>
+              <td>LinkedIn Top Startups #18; Forbes profile notes $3.5B security startup; Crunchbase/press report $356M Series D and rapid ARR growth. Not visible in Paraform top 50 from the current public page.</td>
+              <td>Important counter-source catch. Strong security, software supply chain, open-source infrastructure, startup-growth, and enterprise-trust relevance to TRM. Absence from Paraform does not mean weak fit.</td>
+              <td>Add to primary security/compliance targets.</td>
+            </tr>
+            <tr>
+              <td>Drata</td>
+              <td>LinkedIn Top Startups #30; not visible in Paraform top 50 from current public page.</td>
+              <td>Strong compliance automation adjacency. Good counter-source target, especially for engineers with integrations, workflow, and internal/customer platform ownership.</td>
+              <td>Add to security/compliance expansion pool.</td>
+            </tr>
+            <tr>
+              <td>Zip</td>
+              <td>LinkedIn Top Startups #24; not visible in Paraform top 50 from current public page.</td>
+              <td>Procurement workflow platform; less mission-adjacent than security/risk, but strong product engineering and enterprise workflow signal.</td>
+              <td>Selective product/workflow SaaS expansion.</td>
+            </tr>
+            <tr>
+              <td>Cyera</td>
+              <td>LinkedIn Top Startups #20; not visible in Paraform top 50 from current public page.</td>
+              <td>AI security/data security relevance is high. Good for backend/data/security product engineers if tenure and startup pace check out.</td>
+              <td>Add to security/data expansion pool.</td>
+            </tr>
+            <tr>
+              <td>Common Room</td>
+              <td>LinkedIn Top Startups #21; not visible in Paraform top 50 from current public page.</td>
+              <td>AI-native GTM platform; good product/workflow signal but weaker direct mission adjacency.</td>
+              <td>Selective expansion if full-stack/platform scope is clear.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Recommended weighting</h4>
+        <table>
+          <thead><tr><th>Signal family</th><th>Weight</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Paraform talent density</td><td>40%</td><td>Closest to the question we are trying to answer: where does the market fight for talent?</td></tr>
+            <tr><td>TRM role relevance</td><td>30%</td><td>A great company is not enough; the engineering work needs to map to API/product/backend systems.</td></tr>
+            <tr><td>LinkedIn / Forbes employer momentum</td><td>15%</td><td>Validates hiring momentum, jobseeker interest, employee satisfaction, and growth.</td></tr>
+            <tr><td>Funding / stage data</td><td>10%</td><td>Confirms the company is scaling, but does not substitute for quality.</td></tr>
+            <tr><td>Editorial / category lists</td><td>5%</td><td>Useful tie-breaker for emerging companies and category heat.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="linkedin">
+        <div class="section-head">
+          <span class="badge">L</span>
+          <div>
+            <h3>LinkedIn Search Starting Points</h3>
+            <p class="lead">Dylan-owned execution layer. AI can generate strings; LinkedIn validates truth.</p>
+          </div>
+        </div>
+        <h4>Company-led search</h4>
+        <pre><code>("Senior Software Engineer" OR "Software Engineer" OR "Full Stack Engineer" OR "Product Engineer")
+("Ramp" OR "Vanta" OR "Metronome" OR "Merge" OR "Linear" OR "Modal Labs" OR "LangChain" OR "Baseten" OR "Hex" OR "Pinecone" OR "Vannevar Labs")
+("API" OR "backend" OR "platform" OR "product" OR "TypeScript" OR "Node" OR "Postgres" OR "React")
+"United States"</code></pre>
+
+        <h4>Role-signal search</h4>
+        <pre><code>("Senior Software Engineer" OR "Full Stack Engineer" OR "Product Engineer")
+("API" OR "public API" OR "platform" OR "internal tools" OR "backend services" OR "customer workflows")
+("startup" OR "Series B" OR "Series C" OR "founding engineer" OR "tech lead")
+("United States" OR "Remote")</code></pre>
+
+        <h4>Manual validation checklist</h4>
+        <ul>
+          <li>US-based location; citizenship remains "requires validation" unless explicit.</li>
+          <li>5+ years professional software engineering experience.</li>
+          <li>At least one high-growth startup aligned to the company guide.</li>
+          <li>2+ year tenure pattern or defensible explanation.</li>
+          <li>Full-stack/product/API/backend evidence, not only pure frontend or pure infra.</li>
+          <li>Not from direct TRM competitors and not duplicative with another finalist company.</li>
+        </ul>
+        <h4>Validated pull: May 19, 2026</h4>
+        <div class="callout">A LinkedIn Talent Insights pull across Ramp, Vanta, Metronome, Linear, LangChain, Hex, Baseten, and Modal Labs returned <strong>490 professionals</strong> using US location, 5-30+ years experience, SWE/full-stack/senior SWE titles, and API/backend/platform/product/TypeScript/Node/Postgres/React keywords. This is a focused, high-quality pool rather than a broad national SWE market.</div>
+      </section>
+
+      <section id="notion">
+        <div class="section-head">
+          <span class="badge">N</span>
+          <div>
+            <h3>Notion-Ready Copy</h3>
+            <p class="lead">Use this in Step 1 and Step 4 after final edits.</p>
+          </div>
+        </div>
+        <h4>Definition answer draft</h4>
+        <div class="callout">I define a high-growth, fast-paced startup less by funding alone and more by talent density and operating environment. Using Paraform's Talent Density Index as an external model, I look for companies that attract exceptional people, retain a high technical bar as they scale, and produce employees the market actively wants to recruit. For TRM, that matters because the role requires an engineer who can operate with ambiguity, speed, ownership, and cross-functional judgment while building scalable product systems and APIs.</div>
+        <h4>Company guide explanation draft</h4>
+        <div class="callout">I used Paraform's Talent Density Index as a starting point, then filtered it for TRM relevance: US-based sourcing fit, non-competitor status, API/platform/full-stack product engineering relevance, security/compliance/data adjacency, and evidence that candidates from those companies would be used to high-ownership startup environments. I would not treat the index as a final answer; it is a guide for where to look first, then LinkedIn/manual review validates each candidate.</div>
+      </section>
+
+      <p class="footer">Built from the Paraform Talent Density Index and adapted for TRM's Senior Full-Stack Product Engineering search. Company rankings should be treated as sourcing guidance, not candidate proof.</p>
+    </main>
+  </div>
+</body>
+</html>

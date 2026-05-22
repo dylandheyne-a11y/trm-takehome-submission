@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Recruiting Profile Evaluator Agent Plan</title>
+<style>
+:root{--ink:#2f3437;--muted:#5f666b;--line:#e8e6e3;--soft:#f7f6f3;--blue:#337ea9;--bluebg:#e7f3ff}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1050px;margin:0 auto;padding:44px 24px 80px}a{color:#2b6cb0;text-decoration:underline;text-underline-offset:2px}h1{font-size:44px;line-height:1.05;margin:0 0 18px}h2{font-size:28px;margin:28px 0 12px;background:var(--bluebg);border-radius:6px;padding:4px 9px}h3{font-size:22px;margin:24px 0 8px}p,li{color:var(--muted)}code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 4px;color:var(--ink)}pre{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:14px;overflow:auto}.table-wrap{overflow:auto;border:1px solid var(--line);margin:16px 0}table{width:100%;border-collapse:collapse;min-width:720px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:var(--soft);text-transform:uppercase;font-size:13px}.back{display:inline-block;margin-bottom:22px;font-size:14px}.note{border-left:4px solid var(--blue);background:#f3f8fc;padding:12px 14px;border-radius:0 6px 6px 0;margin:16px 0;color:#26384f}</style></head>
+<body><main class="wrap"><a class="back" href="trm-final-submission-draft.html">← Back to final submission</a><h1>Recruiting Profile Evaluator Agent Plan</h1><div class="note">Supporting artifact for the TRM take-home submission. This page is intentionally browser-native so it can be shared from GitHub Pages.</div><h2>Recruiting Profile Evaluator Agent Plan</h2>
+<p>Status: future reusable skill / agent plan</p>
+<p>Source memory: <code>docs/RECRUITING_AGENT_MEMORY.md</code></p>
+<p>Current use case: TRM Labs Senior Full-Stack Product Engineering take-home</p>
+<h3>Pithy Thesis</h3>
+<p>The agent should not just score profiles. It should help Dylan make faster recruiter decisions from thin sourcing data.</p>
+<p>Score is the scaffolding. Verdict, evidence, archetype, and calibration are the actual judgment layer.</p>
+<h3>What This Agent Does</h3>
+<p>The agent reviews pasted LinkedIn/profile/resume notes and returns:</p>
+<ol>
+<li>Verdict</li>
+<li>One-line why</li>
+<li>Score</li>
+<li>Candidate archetype</li>
+<li>What we can reasonably infer</li>
+<li>What still needs validation</li>
+<li>False-positive risk</li>
+<li>Hireability read</li>
+<li>Recommended next step</li>
+<li>Probe question or outreach hook</li>
+</ol>
+<h3>Sourcing-Native Caveat</h3>
+<p>For sourcing, LinkedIn data is often thin. Do not treat missing detail as proof of weakness when the company, team, and archetype are strong.</p>
+<p>If the candidate is at the right company, on the right kind of team, with the right profile archetype, the default should usually be:</p>
+<p>&gt; Soft Flag / validate with probe</p>
+<p>not:</p>
+<p>&gt; Skip / insufficient data</p>
+<p>This differs from full resume review. In resume review, missing evidence is more concerning because the candidate had the opportunity to present detail. In sourcing, missing evidence is normal.</p>
+<h3>Verdict Taxonomy</h3>
+<p>Use these consistently:</p>
+<div class="table-wrap"><table><thead><tr><th>Verdict</th><th>Meaning</th><th>Action</th></tr></thead><tbody><tr><td>Strong Yes</td><td>Clear fit from visible evidence</td><td>Prioritize for slate or outreach</td></tr><tr><td>Yes</td><td>Good fit with manageable unknowns</td><td>Advance, validate unknowns</td></tr><tr><td>Soft Flag</td><td>Promising archetype but limited profile evidence</td><td>Keep in longlist; use probe question</td></tr><tr><td>No</td><td>Missing core functional fit</td><td>Pass and log reason</td></tr><tr><td>Def No</td><td>Active disqualifier</td><td>Pass immediately</td></tr><tr><td>Skip</td><td>Too little data and weak company/team/archetype prior</td><td>Seek more info only if needed</td></tr></tbody></table></div>
+<h3>TRM-Specific Candidate Archetypes</h3>
+<p>Prefer candidates who fall into one of these archetypes:</p>
+<ol>
+<li>API / Developer Platform Builder</li>
+<li>Full-Stack Product Systems Owner</li>
+<li>Security / Compliance Workflow Engineer</li>
+<li>Enterprise Workflow / Internal Tools Builder</li>
+<li>Data / Search / Knowledge Systems Engineer</li>
+<li>Billing / Metering / Usage Platform Engineer</li>
+<li>Product Platform / Shared Capabilities Engineer</li>
+<li>Reliability-minded Product Engineer</li>
+<li>Applied AI Product Engineer with customer workflow depth</li>
+</ol>
+<h3>TRM False Positive Risks</h3>
+<p>Log and watch for:</p>
+<ul>
+<li>API consumer, not API builder</li>
+<li>Frontend-heavy full-stack profile with no backend/API ownership</li>
+<li>Infra/platform profile adjacent to product but not building product systems</li>
+<li>AI-company profile with hype signal but no product/backend evidence</li>
+<li>Security/compliance-adjacent profile with no product engineering ownership</li>
+<li>Strong company but early-career / insufficient senior scope</li>
+<li>Job hopper pattern with no 2+ year compounding impact</li>
+</ul>
+<h3>Opacity Rule For Sourcing</h3>
+<p>If LinkedIn is thin but the candidate has:</p>
+<ul>
+<li>strong company signal,</li>
+<li>relevant team/function signal,</li>
+<li>plausible seniority,</li>
+<li>US-based location,</li>
+<li>and no obvious disqualifier,</li>
+</ul>
+<p>then do not over-penalize. Mark:</p>
+<p>&gt; Soft Flag: strong archetype, needs validation</p>
+<p>Then generate a probe question.</p>
+<p>Example probe:</p>
+<p>&gt; Your work at Vanta caught my eye, especially the compliance/platform side. I am curious whether you have owned backend/API systems or customer-facing workflow products end to end.</p>
+<h3>Agent Output Format</h3>
+<pre><code>Verdict:
+One-line why:
+Score:
+Archetype:
+What we can infer:
+What needs validation:
+False-positive risk:
+Hireability read:
+Recommended next step:
+Probe / outreach hook:
+CSV analysis:</code></pre>
+<h3>How It Fits The Architecture</h3>
+<ol>
+<li>Company Guide: where to look</li>
+<li>Team Taxonomy: what teams/functions to target</li>
+<li>Candidate Review Workstation: paste, score, log</li>
+<li>Profile Evaluator Agent: verdict + analysis + false-positive logic</li>
+<li>HM Feedback Loop: update false-positive log and search criteria</li>
+</ol>
+<h3>Future Skill Shape</h3>
+<p>Potential skill name:</p>
+<p><code>recruiting-profile-evaluator</code></p>
+<p>Skill trigger:</p>
+<ul>
+<li>reviewing pasted LinkedIn profiles</li>
+<li>ranking sourced candidates</li>
+<li>evaluating resume/profile fit against a JD</li>
+<li>calibrating after HM feedback</li>
+<li>identifying false positive patterns</li>
+</ul>
+<p>Core instruction:</p>
+<p>&gt; Be decisive, sourcing-aware, and calibration-driven. Do not confuse scoring with judgment. Do not over-penalize thin LinkedIn profiles when company/team/archetype signal is strong. Surface what must be validated and give a practical next step.</p>
+<h3>Evidence For TRM AI Fluency</h3>
+<p>This is useful to describe in the take-home:</p>
+<p>&gt; I used prior recruiting calibration data to build a profile evaluator that distinguishes surface signals from practitioner evidence, adapts to thin sourcing data, logs false-positive risks, and keeps the recruiter accountable for final judgment.</p></main></body></html>
