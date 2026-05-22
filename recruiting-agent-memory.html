@@ -1,214 +1,73 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Recruiting Agent Memory</title>
-<style>
-:root{--ink:#2f3437;--muted:#5f666b;--line:#e8e6e3;--soft:#f7f6f3;--blue:#337ea9;--bluebg:#e7f3ff}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1050px;margin:0 auto;padding:44px 24px 80px}a{color:#2b6cb0;text-decoration:underline;text-underline-offset:2px}h1{font-size:44px;line-height:1.05;margin:0 0 18px}h2{font-size:28px;margin:28px 0 12px;background:var(--bluebg);border-radius:6px;padding:4px 9px}h3{font-size:22px;margin:24px 0 8px}p,li{color:var(--muted)}code{background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:1px 4px;color:var(--ink)}pre{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:14px;overflow:auto}.table-wrap{overflow:auto;border:1px solid var(--line);margin:16px 0}table{width:100%;border-collapse:collapse;min-width:720px}th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}th{background:var(--soft);text-transform:uppercase;font-size:13px}.back{display:inline-block;margin-bottom:22px;font-size:14px}.note{border-left:4px solid var(--blue);background:#f3f8fc;padding:12px 14px;border-radius:0 6px 6px 0;margin:16px 0;color:#26384f}</style></head>
-<body><main class="wrap"><a class="back" href="trm-final-submission-draft.html">← Back to final submission</a><h1>Recruiting Agent Memory</h1><div class="note">Supporting artifact for the TRM take-home submission. This page is intentionally browser-native so it can be shared from GitHub Pages.</div><h2>Recruiting Agent — Memory &amp; Methodology</h2>
-<h3>Built from live resume review sessions across 6+ roles, 100+ candidate evaluations</h3>
-<h4>Author: Dylan Heyne | For use in Claude Code / Codex agent build</h4>
-<p>---</p>
-<h3>WHAT THIS IS</h3>
-<p>This document captures what has actually worked across multiple live recruiting projects. It is NOT a rubric document. It is a reasoning document.</p>
-<p>The rubric is a scaffold. This is the judgment layer that runs on top of it. Feed both to the agent. The rubric structures output. This document prevents the agent from being wrong in systematic ways.</p>
-<p>---</p>
-<h3>THE CORE PRINCIPLE</h3>
-<p><strong>The scoring system is a forcing function, not a truth machine.</strong></p>
-<p>Scores rank candidates against each other. They do not tell you whether any candidate is actually hireable. The agent's job is to surface the top of the pool AND flag when the pool is structurally weak.</p>
-<p>A score of 95 from a weak pool is still a weak candidate. Always calibrate against absolute bar, not relative rank.</p>
-<p>---</p>
-<h3>WHAT HAS WORKED</h3>
-<h4>1\. Verdict First, Always</h4>
-<p>Every candidate response leads with a clear decision before any explanation.</p>
-<ul>
-<li>Strong Yes / Yes / Soft Flag / No / Def No</li>
-<li>One line justification follows</li>
-<li>Evidence bullets after that</li>
-<li>Never bury the decision in qualifications</li>
-</ul>
-<p>This prevents hedge outputs that look useful but give no direction.</p>
-<h4>2\. The False Positive Pattern Log</h4>
-<p>Every role develops 2–3 false positive archetypes within the first 10–15 profiles. These are profiles that look right at a glance but fail on the critical filter.</p>
-<p><strong>Proven false positive patterns by role type:</strong></p>
-<div class="table-wrap"><table><thead><tr><th>Role</th><th>Surface Signal</th><th>False Positive Pattern</th></tr></thead><tbody><tr><td>SDK Engineer</td><td>"Android developer"</td><td>App developer using SDKs, not building them</td></tr><tr><td>Quant Risk</td><td>"Execution quant"</td><td>TCA analyst, desk strategist, model validator — none build execution infrastructure</td></tr><tr><td>FP\&amp;A L6</td><td>"Full P\&amp;L ownership"</td><td>Revenue/GTM finance; OpEx was "supported," not owned</td></tr><tr><td>Recon Ops</td><td>"Reconciliation experience"</td><td>AR/AP aging, budget variance — not transaction/position recon with break lifecycle</td></tr><tr><td>Cyprus Accountant</td><td>"CIF experience"</td><td>Audited CIF clients vs. worked inside one — different domain knowledge</td></tr><tr><td>IT Audit</td><td>"IT audit experience"</td><td>Financial audit with IT controls exposure ≠ IT/security audit practitioner</td></tr></tbody></table></div>
-<p><strong>Agent instruction:</strong> Build a false positive log per role from the first 15 profiles reviewed. Update it when HM feedback reveals a new pattern. Surface the log when evaluating ambiguous profiles.</p>
-<h4>3\. The Critical Language Test</h4>
-<p>Claims must be specific and use practitioner language. Generic language \= surface-level exposure.</p>
-<p><strong>Examples of the distinction:</strong></p>
-<div class="table-wrap"><table><thead><tr><th>Weak (surface exposure)</th><th>Strong (practitioner)</th></tr></thead><tbody><tr><td>"Managed reconciliations"</td><td>"Aged breaks, root cause analysis, escalation workflow, daily safeguarding report"</td></tr><tr><td>"Full-stack engineer"</td><td>"Built public API product with Postgres-backed services and Node.js"</td></tr><tr><td>"OpEx experience"</td><td>"Owned $45M OpEx budget for Engineering, built zero-based model from scratch"</td></tr><tr><td>"Risk quant"</td><td>"Built stochastic liquidation model adapting Almgren-Chriss for stressed regimes"</td></tr><tr><td>"Internal audit"</td><td>"Led end-to-end ITGC audits across cloud infrastructure; CISA certified"</td></tr></tbody></table></div>
-<p>If a profile uses generic language, treat it as unexplained, not evidenced. The agent should flag specific language gaps, not assume positive intent.</p>
-<h4>4\. Calibration Loop — How to Update Mid-Search</h4>
-<p>The most effective sessions used real-time calibration. After the first 10–15 reviews:</p>
-<ul>
-<li>Identify the 2–3 strongest candidates</li>
-<li>Extract the keywords and company patterns that made them strong</li>
-<li>Tighten boolean strings to match those patterns</li>
-<li>Log the discard patterns so they inform future reviews</li>
-</ul>
-<p><strong>Calibration trigger:</strong> When 3+ candidates in a row are discarded for the same reason, that reason should become an explicit exclusion in the search criteria, not just a review filter.</p>
-<h4>5\. The Tenure Pattern Rule</h4>
-<p>Short tenures are only concerning when they are a pattern, not a data point.</p>
-<ul>
-<li>Single short tenure in early career: acceptable</li>
-<li>Multiple tenures under 18 months across career: flag</li>
-<li>Single long tenure as only employer: flag opacity risk (not enough calibration data)</li>
-</ul>
-<p>For senior roles: 2+ years per company as the expectation. One exception allowed for early career.</p>
-<h4>6\. Company as Prior, Not Verdict</h4>
-<p>Target company \= screening shortcut, not qualification. The most consistent failure mode is over-weighting company name.</p>
-<p><strong>The rule from RevenueCat / Vanta profiles:</strong> Vanta appeared twice in TRM review. Neither profile surfaced backend/API evidence. Company got them into review. Evidence (or lack of) determined the outcome.</p>
-<p>Do not advance candidates solely because they work at a target company. Do not reject candidates solely because they don't.</p>
-<h4>7\. The Opacity Problem</h4>
-<p>LinkedIn profiles at high-quality startups are often thin. Engineers at Vanta, Linear, Ramp, Stripe frequently write minimal bios. A thin profile from a strong company ≠ weak candidate.</p>
-<p><strong>Agent instruction:</strong> When a profile is opaque from a Tier 1 company, flag for recruiter validation rather than auto-disqualifying. Advance to outreach with a probe question in the message. Do not score penalize blindly for missing keywords that strong engineers typically don't write about.</p>
-<p><strong>The probe approach:</strong> Outreach message designed to surface technical depth. If reply confirms backend/API/product ownership: advance. If reply is surface-level: pass.</p>
-<h4>8\. HM Feedback Integration — The Most Valuable Signal</h4>
-<p>Every HM "no" with a reason is worth more than 20 resume reviews.</p>
-<p><strong>From Quant Risk (Xiadi Liu):</strong></p>
-<ul>
-<li>"They calculate when to liquidate, not how to execute the liquidation" → updated boolean to exclude TCA analysts</li>
-<li>"Builders, not consultants" → added execution infrastructure keywords, penalized advisory titles</li>
-</ul>
-<p><strong>From FP\&amp;A (Taylor Hankes):</strong></p>
-<ul>
-<li>Varda Malhotra pushed back: claimed full P\&amp;L but it was revenue-side → rule: require dollar amounts AND explicit OpEx language, not just P\&amp;L</li>
-</ul>
-<p><strong>From Recon Ops (Kaiyi Gan):</strong></p>
-<ul>
-<li>Hilton Otamere: 16-month tenure, borderline experience → HM advanced → rule: language quality and domain specificity can outweigh tenure length for ops roles</li>
-</ul>
-<p><strong>Agent instruction:</strong> Log every HM decision with reason. After 5 HM decisions, surface calibration delta: "HM has rejected 3 candidates for \[reason\]. Recommend updating search criteria to exclude \[pattern\]."</p>
-<p>---</p>
-<h3>WHAT HAS NOT WORKED</h3>
-<h4>1\. Starting with Tight Booleans</h4>
-<p>Every role where search started tight returned too-small pools and missed qualified candidates hiding behind different keywords. Always start broad, sample 10–15 profiles, then tighten.</p>
-<h4>2\. Over-Relying on Score</h4>
-<p>Scores are for ranking. They don't replace judgment on:</p>
-<ul>
-<li>Whether the pool is strong enough to hire from</li>
-<li>Whether a borderline profile has hidden depth</li>
-<li>Whether a strong score is on a structurally weak profile</li>
-</ul>
-<p>A 95 in a weak pool is still a pass.</p>
-<h4>3\. Industry Filter as Proxy for Role Fit</h4>
-<p>"Fintech experience" does not mean "recon experience." "Crypto experience" does not mean "execution quant experience." "IT background" does not mean "IT audit experience." Industry is context. Function is the filter. Always confirm function before industry.</p>
-<h4>4\. Treating Penalizing as Disqualifying</h4>
-<p>Penalties in the rubric are risk flags, not automatic DQs. Opacity \+ strong company \= advance with probe. Short early tenure \+ strong recent pattern \= advance. Missing certification \+ strong operational evidence \= discuss with HM, don't auto-DQ.</p>
-<h4>5\. Skipping the "What They Actually Built" Question</h4>
-<p>The single most common error: advancing a profile where the candidate <em>adjacent to</em> the target work rather than <em>doing</em> the target work.</p>
-<ul>
-<li>Used the SDK vs. built the SDK</li>
-<li>Audited the recon team vs. did the reconciliation</li>
-<li>Analyzed the liquidation risk vs. built the liquidation algorithm</li>
-<li>Supported the OpEx model vs. owned the OpEx model</li>
-</ul>
-<p>Always ask: did they do the thing, or were they near the thing?</p>
-<p>---</p>
-<h3>DECISION TAXONOMY</h3>
-<p>Use these verdicts consistently. No inventing new language.</p>
-<div class="table-wrap"><table><thead><tr><th>Verdict</th><th>Meaning</th><th>Action</th></tr></thead><tbody><tr><td>Strong Yes</td><td>Clear fit, advance immediately</td><td>Move to outreach / next stage</td></tr><tr><td>Yes</td><td>Qualified, minor unknowns</td><td>Advance, note unknowns for screen</td></tr><tr><td>Soft Flag</td><td>Meets some bar, meaningful gaps</td><td>Advance only if pool is weak; flag gaps to HM</td></tr><tr><td>No</td><td>Does not meet functional bar</td><td>Pass, log reason</td></tr><tr><td>Def No</td><td>Active disqualifier present</td><td>Pass immediately, log pattern</td></tr><tr><td>Skip</td><td>Insufficient data to evaluate</td><td>Seek more info before deciding</td></tr><tr><td>Fake</td><td>Profile signals inflated or misleading</td><td>Pass, flag for boolean refinement</td></tr></tbody></table></div>
-<p>---</p>
-<h3>STACK RANKING RULES</h3>
-<ol>
-<li>Rank within role, not across roles. Context is everything.</li>
-<li>When two candidates are within 5 points, the tiebreaker is hireability and tenure pattern, not score.</li>
-<li>Always note whether the stack rank is from a strong or weak pool. A \#1 in a weak pool needs that label.</li>
-<li>Update the rank every 10 candidates reviewed. Don't lock it after 3\.</li>
-<li>If the top candidate has a major unknown, surface it before presenting to HM.</li>
-</ol>
-<p>---</p>
-<h3>ROLE-SPECIFIC CONTEXT: TRM LABS FULL-STACK ENGINEER</h3>
-<h4>The Critical Distinction for This Role</h4>
-<p>API <em>builder</em> vs. API <em>consumer</em>. Same false positive risk as SDK authorship vs. SDK integration.</p>
-<p>An engineer who consumed APIs, integrated third-party services, or called external endpoints ≠ an engineer who designed and owned a public API surface.</p>
-<p><strong>Practitioner language to look for:</strong></p>
-<ul>
-<li>"Designed REST API," "built API product," "public API," "developer platform," "API gateway"</li>
-<li>"PostgreSQL schema design," "query optimization," "database performance"</li>
-<li>"Technical anchor," "tech lead," "owned feature end-to-end from requirements to launch"</li>
-</ul>
-<p><strong>False positive archetypes for this role:</strong></p>
-<ul>
-<li>Frontend-heavy engineers with backend exposure but no API ownership</li>
-<li>Data engineers who touch Postgres but don't build product APIs</li>
-<li>Infrastructure engineers who maintain API infrastructure but didn't design it</li>
-<li>Early career engineers at strong companies with insufficient scope</li>
-</ul>
-<h4>Hard Filters (Non-Negotiable)</h4>
-<ul>
-<li>5+ years professional SWE experience</li>
-<li>US-based and eligible</li>
-<li>At least one high-growth startup stint</li>
-<li>Not from direct TRM competitors (Chainalysis, Elliptic, Merkle)</li>
-</ul>
-<h4>AI Fluency Bar</h4>
-<p>TRM explicitly evaluates this in process. Surface it in outreach. Candidates who haven't integrated AI into their workflow will likely DQ in process — save everyone's time.</p>
-<h4>Mission Fit as a Screen</h4>
-<p>TRM's JD explicitly warns the pace/intensity isn't for everyone. This is a culture screen, not a perk section. Use it in outreach to self-select. The mission (crypto intelligence / law enforcement) resonates strongly with specific candidate profiles:</p>
-<ul>
-<li>Govtech / national security adjacent engineers</li>
-<li>Engineers at fraud/compliance/risk platforms (Vanta, Drata, Persona, Socure, Sardine)</li>
-<li>Engineers who explicitly write about impact, not just craft</li>
-</ul>
-<h4>Company Signal Priority</h4>
-<p>Tier 1: Chainalysis, Elliptic, Vanta, Ramp, Brex, Mercury, Modern Treasury, Sardine, Stripe, Plaid Tier 2: Fireblocks, Alchemy, Anchorage, QuickNode, ComplyAdvantage, Persona, Alloy Tier 3: Any API-first B2B SaaS with Node.js \+ Postgres signal</p>
-<p>---</p>
-<h3>AGENT OPERATING INSTRUCTIONS</h3>
-<h4>On receiving a profile:</h4>
-<ol>
-<li>Check hard filters first. If any fail, DQ immediately with reason.</li>
-<li>Apply role-specific false positive check before scoring.</li>
-<li>Score using rubric.</li>
-<li>Apply penalties.</li>
-<li>Issue verdict.</li>
-<li>Note top 1–2 unknowns.</li>
-<li>Suggest outreach hook or next step.</li>
-<li>Update stack rank.</li>
-</ol>
-<h4>On HM feedback:</h4>
-<ol>
-<li>Log decision \+ reason.</li>
-<li>Check if it matches an existing discard pattern.</li>
-<li>If new pattern: add to false positive log, flag for boolean update.</li>
-<li>If confirms existing pattern: reinforce discard signal in future evals.</li>
-</ol>
-<h4>On pool quality:</h4>
-<ol>
-<li>After 15 profiles, surface pool quality assessment.</li>
-<li>If top candidate has meaningful gaps: say so.</li>
-<li>If pool is structurally weak: recommend boolean/search adjustment before advancing weak candidates.</li>
-</ol>
-<h4>On ambiguous profiles (Opacity Rule):</h4>
-<ol>
-<li>Flag as Skip if insufficient data from a Tier 1 company.</li>
-<li>Recommend outreach with probe question.</li>
-<li>Do not score penalize for missing keywords that strong engineers typically omit.</li>
-<li>Revisit after outreach response.</li>
-</ol>
-<p>---</p>
-<h3>CALIBRATION CHECKPOINTS</h3>
-<p>Run these at defined intervals, surface to recruiter:</p>
-<p><strong>After 15 profiles:</strong></p>
-<ul>
-<li>Top 3 candidates so far</li>
-<li>False positive pattern identified (if any)</li>
-<li>Boolean refinement recommendation (if any)</li>
-<li>Pool strength assessment</li>
-</ul>
-<p><strong>After first 3 HM decisions:</strong></p>
-<ul>
-<li>HM calibration summary: what they're saying yes/no to and why</li>
-<li>Delta from original criteria: what's shifted</li>
-<li>Recommended screening question updates</li>
-</ul>
-<p><strong>After 5 HM decisions:</strong></p>
-<ul>
-<li>Pattern confirmation or contradiction</li>
-<li>Recommend search strategy adjustment if \&gt;60% pass rate or \&lt;20% advance rate</li>
-</ul>
-<p>---</p>
-<h3>META-LESSON</h3>
-<p>The review process works because it holds pattern recognition across many evaluations and calibrates in real time.</p>
-<p>A static rubric run once per candidate is a tool. A calibrating agent that learns from the session is intelligence.</p>
-<p>The rubric structures the output. The false positive log prevents systematic errors. The HM feedback loop closes the gap between what the job description says and what the hiring manager actually wants. The stack rank forces relative judgment, not just absolute assessment.</p>
-<p>All four together \= the system. None alone is sufficient.</p>
-<p>---</p>
-<p><em>Built from live sessions: RevenueCat SDK (24 candidates), Coinbase Quant Risk, Coinbase Recon Ops, Coinbase FP\&amp;A L6, Coinbase Cyprus Staff Accountant, Coinbase IT Audit L5/L6/L7. Dylan Heyne, Technical Recruiter.</em></p></main></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recruiting Agent Memory Summary</title>
+  <style>
+    :root{--ink:#2f3437;--muted:#5f666b;--line:#e8e6e3;--soft:#f7f6f3;--blue:#337ea9;--bluebg:#e7f3ff}
+    *{box-sizing:border-box}
+    body{margin:0;background:#fff;color:var(--ink);font:17px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .wrap{max-width:980px;margin:0 auto;padding:44px 24px 80px}
+    a{color:#2b6cb0;text-decoration:underline;text-underline-offset:2px}
+    h1{font-size:44px;line-height:1.05;margin:0 0 18px}
+    h2{font-size:28px;margin:28px 0 12px;background:var(--bluebg);border-radius:6px;padding:4px 9px}
+    h3{font-size:22px;margin:24px 0 8px}
+    p,li{color:var(--muted)}
+    .back{display:inline-block;margin-bottom:22px;font-size:14px}
+    .note{border-left:4px solid var(--blue);background:#f3f8fc;padding:12px 14px;border-radius:0 6px 6px 0;margin:16px 0;color:#26384f}
+    .table-wrap{overflow:auto;border:1px solid var(--line);margin:16px 0}
+    table{width:100%;border-collapse:collapse;min-width:720px}
+    th,td{border:1px solid var(--line);padding:10px 12px;text-align:left;vertical-align:top}
+    th{background:var(--soft);text-transform:uppercase;font-size:13px;letter-spacing:.02em}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <a class="back" href="trm-final-submission-draft.html">← Back to final submission</a>
+  <h1>Recruiting Agent Memory Summary</h1>
+  <div class="note"><strong>Privacy note:</strong> this is a sanitized summary of the agent memory used to guide the TRM review. It removes prior candidate names, hiring manager names, company-specific private examples, and historical search details.</div>
+
+  <h2>What The Memory Does</h2>
+  <p>The memory is the judgment layer behind the profile evaluator. The rubric gives structure, but the memory teaches the agent how recruiters actually calibrate: what to trust, what to question, and when a profile is adjacent to the work rather than doing the work.</p>
+
+  <h2>Core Principles</h2>
+  <ul>
+    <li><strong>Verdict first.</strong> Start with Strong Yes / Yes / Soft Flag / No / Def No, then explain why.</li>
+    <li><strong>Score is not truth.</strong> Scores help rank a pool, but a high score from a weak or wrong-archetype pool is still not enough.</li>
+    <li><strong>Company is a prior, not a verdict.</strong> Target companies help decide who enters review. Candidate evidence decides whether they advance.</li>
+    <li><strong>Function beats industry.</strong> Similar industry does not matter if the person did the wrong work.</li>
+    <li><strong>Thin profiles require probes.</strong> A sparse LinkedIn from a strong company should become a validation item, not an invented positive or an automatic reject.</li>
+    <li><strong>HM feedback updates the model.</strong> Every clear yes/no reason becomes a rule candidate for the next batch.</li>
+  </ul>
+
+  <h2>False Positive Pattern</h2>
+  <p>Most searches develop repeat false positives within the first 10-15 profiles. The agent is instructed to identify and log those patterns quickly.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Surface signal</th><th>Risk</th><th>What the agent should ask</th></tr></thead>
+      <tbody>
+        <tr><td>"Worked with APIs"</td><td>May be API consumer, not API builder.</td><td>Did they design/own the API surface?</td></tr>
+        <tr><td>"Platform engineer"</td><td>Could mean infra, tooling, or product platform.</td><td>Was the work customer/developer-facing?</td></tr>
+        <tr><td>"Full-stack"</td><td>May be frontend-heavy with limited backend ownership.</td><td>What backend services, data models, or APIs did they own?</td></tr>
+        <tr><td>"Security / compliance"</td><td>Could be analyst, GRC, DevOps, or product engineering.</td><td>Were they building product systems or supporting controls?</td></tr>
+        <tr><td>"High-growth company"</td><td>Company quality can mask wrong function.</td><td>Does the profile evidence match the role, independent of company brand?</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>TRM-Specific Application</h2>
+  <ul>
+    <li>Prioritize product/API/backend ownership over generic engineering seniority.</li>
+    <li>Separate fraud/risk/security product engineers from ML infra or data-only profiles.</li>
+    <li>Look for public API, REST/GraphQL, SDK, auth, identity, risk, fraud, compliance workflow, and platform product evidence.</li>
+    <li>Treat startup pace as operating-context evidence, not a substitute for technical fit.</li>
+    <li>Use outreach probes to validate missing LinkedIn details instead of over-scoring thin profiles.</li>
+  </ul>
+
+  <h2>How This Was Used</h2>
+  <p>For the TRM search, this memory shaped the calibration loop: Codex scored candidates, Claude/human review challenged misses, and the evaluator rules were tightened around function, evidence quality, and false-positive caps.</p>
+  <p>The public calibration artifact shows that process without exposing the full private memory.</p>
+</main>
+</body>
+</html>
